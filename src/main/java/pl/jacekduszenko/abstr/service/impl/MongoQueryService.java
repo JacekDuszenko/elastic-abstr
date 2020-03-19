@@ -20,10 +20,14 @@ public class MongoQueryService implements QueryService {
 
     private final IndexQueryParserService indexQueryParserService;
 
-    public QueryResult translateQuery(String elasticQuery) {
+    public QueryResult search(String elasticQuery) {
         Query luceneQuery = indexQueryParserService.parse(elasticQuery).query();
         logExtractedTerms(luceneQuery);
-        return null;
+
+        //TODO 1. write a custom lucene query parser to translate into mongo syntax
+        //TODO 2. execute created mongo dsl against embedded db and return results
+
+        return new QueryResult();
     }
 
     private void logExtractedTerms(Query luceneQuery) {

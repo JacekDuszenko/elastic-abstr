@@ -5,11 +5,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.service.QueryService;
 
+import java.io.IOException;
+
 import static org.mockito.Mockito.mock;
 
 
 public class MongoQueryServiceTest {
-    private static final String exampleQuery = "\"{\\n\" +\n" +
+
+    private static final String validElasticsearchQuery = "\"{\\n\" +\n" +
             "        \"  \\\"query\\\": {\\n\" +\n" +
             "        \"    \\\"match\\\" : {\\n\" +\n" +
             "        \"      \\\"name\\\" : \\\"some string\\\"\\n\" +\n" +
@@ -18,7 +21,6 @@ public class MongoQueryServiceTest {
             "        \"}\"";
 
     private QueryService queryService;
-
     private IndexQueryParserService indexQueryParserService = mock(IndexQueryParserService.class);
 
     @BeforeEach
@@ -27,7 +29,7 @@ public class MongoQueryServiceTest {
     }
 
     @Test
-    void shouldParseQueryToLuceneDsl() {
-
+    void shouldTranslateQueryAndReturnValidResultsFromMongo() throws IOException {
+        queryService.search(validElasticsearchQuery);
     }
 }

@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface QueryService {
 
-    QueryResult translateQuery(String elasticQuery) throws IOException;
+    QueryResult search(String elasticQuery) throws IOException;
 }

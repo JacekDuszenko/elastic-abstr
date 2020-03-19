@@ -22,6 +22,6 @@ public class QueryController {
 
     @GetMapping("/search")
     QueryResult searchForQuery(@RequestBody String elasticQuery) throws IOException {
-        return queryService.translateQuery(elasticQuery);
+        return queryService.search(elasticQuery);
     }
 }
