@@ -1,4 +1,4 @@
-package pl.jacekduszenko.abstr;
+package pl.jacekduszenko.abstr.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
