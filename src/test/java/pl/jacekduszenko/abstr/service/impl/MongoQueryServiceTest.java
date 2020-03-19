@@ -1,8 +1,12 @@
 package pl.jacekduszenko.abstr.service.impl;
 
+import org.elasticsearch.client.Client;
+import org.elasticsearch.indices.IndicesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.service.QueryService;
+
+import static org.mockito.Mockito.mock;
 
 
 public class MongoQueryServiceTest {
@@ -14,8 +18,9 @@ public class MongoQueryServiceTest {
             "        \"  }\\n\" +\n" +
             "        \"}\"";
 
-
     private QueryService queryService;
+
+    private Client client = mock(Client.class);
 
     @BeforeEach
     void setUp() {
