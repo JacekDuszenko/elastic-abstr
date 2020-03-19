@@ -1,8 +1,10 @@
 package pl.jacekduszenko.abstr.service.impl;
 
 import org.elasticsearch.index.query.IndexQueryParserService;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.jacekduszenko.abstr.data.ElasticsearchQueryLoader;
 import pl.jacekduszenko.abstr.service.QueryService;
 
 import java.io.IOException;
@@ -11,14 +13,6 @@ import static org.mockito.Mockito.mock;
 
 
 public class MongoQueryServiceTest {
-
-    private static final String validElasticsearchQuery = "\"{\\n\" +\n" +
-            "        \"  \\\"query\\\": {\\n\" +\n" +
-            "        \"    \\\"match\\\" : {\\n\" +\n" +
-            "        \"      \\\"name\\\" : \\\"some string\\\"\\n\" +\n" +
-            "        \"    }\\n\" +\n" +
-            "        \"  }\\n\" +\n" +
-            "        \"}\"";
 
     private QueryService queryService;
     private IndexQueryParserService indexQueryParserService = mock(IndexQueryParserService.class);
@@ -29,7 +23,10 @@ public class MongoQueryServiceTest {
     }
 
     @Test
+    @Ignore
     void shouldTranslateQueryAndReturnValidResultsFromMongo() throws IOException {
+        String validElasticsearchQuery = ElasticsearchQueryLoader.loadElasticQueryFromFile("query1.json");
         queryService.search(validElasticsearchQuery);
+        //TODO implement rest of the test after custom lucene parser implemented
     }
 }
