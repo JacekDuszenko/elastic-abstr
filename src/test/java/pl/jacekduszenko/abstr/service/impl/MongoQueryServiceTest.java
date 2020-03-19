@@ -1,7 +1,6 @@
 package pl.jacekduszenko.abstr.service.impl;
 
-import org.elasticsearch.client.Client;
-import org.elasticsearch.indices.IndicesService;
+import org.elasticsearch.index.query.IndexQueryParserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.service.QueryService;
@@ -20,11 +19,11 @@ public class MongoQueryServiceTest {
 
     private QueryService queryService;
 
-    private Client client = mock(Client.class);
+    private IndexQueryParserService indexQueryParserService = mock(IndexQueryParserService.class);
 
     @BeforeEach
     void setUp() {
-        queryService = new MongoQueryService();
+        queryService = new MongoQueryService(indexQueryParserService);
     }
 
     @Test

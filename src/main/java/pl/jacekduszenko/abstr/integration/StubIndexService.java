@@ -1,4 +1,4 @@
-package pl.jacekduszenko.abstr.stub;
+package pl.jacekduszenko.abstr.integration;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.cluster.metadata.IndexMetaData;
