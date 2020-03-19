@@ -23,6 +23,7 @@ import org.elasticsearch.index.store.IndexStore;
 import java.util.Iterator;
 
 public class StubIndexService implements IndexService {
+
     private final MapperService mapperService;
 
     public StubIndexService(MapperService mapperService) {
