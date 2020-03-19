@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>13</java.version>
+        <elasticsearch.version>7.6.1</elasticsearch.version>
     </properties>
 
     <dependencies>
@@ -54,7 +55,11 @@
             <artifactId>transport</artifactId>
             <version>7.6.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
