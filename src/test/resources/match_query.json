@@ -1,0 +1,26 @@
+{
+  "bool": {
+    "must": [
+      {
+        "match": {
+          "rating": "4.5"
+        }
+      },
+      {
+        "match": {
+          "stringField": "veryGood"
+        }
+      },
+      {
+        "match": {
+          "intField": 13
+        }
+      },
+      {
+        "match": {
+          "boolField": true
+        }
+      }
+    ]
+  }
+}

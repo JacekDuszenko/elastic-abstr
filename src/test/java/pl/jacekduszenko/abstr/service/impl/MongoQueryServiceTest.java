@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.data.ElasticsearchQueryLoader;
 import pl.jacekduszenko.abstr.service.QueryService;
+import pl.jacekduszenko.abstr.service.impl.mongo.MongoQueryService;
 
 import java.io.IOException;
 

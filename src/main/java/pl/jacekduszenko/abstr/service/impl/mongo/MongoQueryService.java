@@ -1,8 +1,7 @@
-package pl.jacekduszenko.abstr.service.impl;
+package pl.jacekduszenko.abstr.service.impl.mongo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,26 +9,17 @@ import org.springframework.stereotype.Service;
 import pl.jacekduszenko.abstr.model.QueryResult;
 import pl.jacekduszenko.abstr.service.QueryService;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MongoQueryService implements QueryService {
 
     private final IndexQueryParserService indexQueryParserService;
+    private final LuceneToMongoTranslator luceneToMongoTranslator;
 
     public QueryResult search(String elasticQuery) {
         Query luceneQuery = indexQueryParserService.parse(elasticQuery).query();
-        logExtractedTerms(luceneQuery);
-
+        luceneToMongoTranslator.translateFromLuceneQuery(luceneQuery);
         return new QueryResult();
-    }
-
-    private void logExtractedTerms(Query luceneQuery) {
-        Set<Term> terms = new HashSet<>();
-        luceneQuery.extractTerms(terms);
-        terms.forEach(t -> log.info(t.toString()));
     }
 }
