@@ -1,8 +1,8 @@
 package pl.jacekduszenko.abstr.service;
 
-import org.apache.lucene.search.Query;
+import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 
-public interface QueryVisitor<B> {
+public interface QueryVisitor<Q, B> {
 
-    void visit(Query q, B bulder);
+    void visit(Q query, B builder) throws VisitorCreationException;
 }

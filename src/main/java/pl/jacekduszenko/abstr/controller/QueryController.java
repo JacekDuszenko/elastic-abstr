@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.jacekduszenko.abstr.model.QueryResult;
+import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.QueryService;
 
 import java.io.IOException;
@@ -21,7 +22,7 @@ public class QueryController {
     private final QueryService queryService;
 
     @GetMapping("/search")
-    QueryResult searchForQuery(@RequestBody String elasticQuery) throws IOException {
+    QueryResult searchForQuery(@RequestBody String elasticQuery) throws IOException, VisitorCreationException {
         return queryService.search(elasticQuery);
     }
 }
