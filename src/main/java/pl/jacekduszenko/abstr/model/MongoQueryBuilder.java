@@ -1,5 +1,6 @@
 package pl.jacekduszenko.abstr.model;
 
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 public class MongoQueryBuilder {
@@ -11,6 +12,10 @@ public class MongoQueryBuilder {
 
     private MongoQueryBuilder() {
         this.mongoQuery = new Query();
+    }
+
+    public void withIsClause(String field, String value) {
+        mongoQuery.addCriteria(Criteria.where(field).regex("^" + value + "$", "i"));
     }
 
     public Query build() {

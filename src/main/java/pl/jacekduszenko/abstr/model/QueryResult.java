@@ -1,11 +1,11 @@
 package pl.jacekduszenko.abstr.model;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 
-@Data
+@RequiredArgsConstructor
 public class QueryResult {
 
-    private Map<String, Object> rawResult;
+    private final List rawResult;
 }

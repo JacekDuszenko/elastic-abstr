@@ -4,12 +4,10 @@ import org.elasticsearch.index.query.IndexQueryParserService;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.jacekduszenko.abstr.data.ElasticsearchQueryLoader;
+import pl.jacekduszenko.abstr.data.ElasticsearchQueryProvider;
 import pl.jacekduszenko.abstr.service.QueryService;
 import pl.jacekduszenko.abstr.service.impl.mongo.LuceneToMongoTranslator;
 import pl.jacekduszenko.abstr.service.impl.mongo.MongoQueryService;
-
-import java.io.IOException;
 
 import static org.mockito.Mockito.mock;
 
@@ -22,14 +20,14 @@ public class MongoQueryServiceTest {
 
     @BeforeEach
     void setUp() {
-        queryService = new MongoQueryService(indexQueryParserService, luceneToMongoTranslator);
+        queryService = new MongoQueryService(indexQueryParserService, luceneToMongoTranslator, null);
     }
 
     @Test
     @Ignore
     void shouldTranslateQueryAndReturnValidResultsFromMongo() throws Exception {
-        String validElasticsearchQuery = ElasticsearchQueryLoader.loadElasticQueryFromFile("boosting_query.json");
-        queryService.search(validElasticsearchQuery);
+        String validElasticsearchQuery = ElasticsearchQueryProvider.loadElasticQueryFromFile("boosting_query.json");
+        queryService.search(validElasticsearchQuery,"mongoMockData");
         //TODO implement rest of the test after custom lucene parser implemented
     }
 }

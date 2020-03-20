@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.jacekduszenko.abstr.config.ElasticParserServiceConfig;
-import pl.jacekduszenko.abstr.data.ElasticsearchQueryLoader;
+import pl.jacekduszenko.abstr.data.ElasticsearchQueryProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -58,7 +58,7 @@ public class IndexQueryParserServiceTest {
 
     private void testQueryFromFile(String filename, String assertedLuceneQuery, Class assertedClass) {
         //given
-        String contents = ElasticsearchQueryLoader.loadElasticQueryFromFile(filename);
+        String contents = ElasticsearchQueryProvider.loadElasticQueryFromFile(filename);
 
         //when
         ParsedQuery parsedQuery = indexQueryParserService.parse(contents);

@@ -10,9 +10,9 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 @Slf4j
-public class ElasticsearchQueryLoader {
+public class ElasticsearchQueryProvider {
     private static final String BLANK = "";
-    private static ClassLoader classLoader = ElasticsearchQueryLoader.class.getClassLoader();
+    private static ClassLoader classLoader = ElasticsearchQueryProvider.class.getClassLoader();
 
     public static String loadElasticQueryFromFile(String filename) {
         try {

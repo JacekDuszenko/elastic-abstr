@@ -3,11 +3,10 @@ package pl.jacekduszenko.abstr.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import pl.jacekduszenko.abstr.model.QueryResult;
+import pl.jacekduszenko.abstr.model.exception.TranslationException;
 import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.QueryService;
 
@@ -21,8 +20,8 @@ public class QueryController {
 
     private final QueryService queryService;
 
-    @GetMapping("/search")
-    QueryResult searchForQuery(@RequestBody String elasticQuery) throws IOException, VisitorCreationException {
-        return queryService.search(elasticQuery);
+    @GetMapping("/search/{collection}")
+    ResponseEntity searchForQuery(@RequestBody String elasticQuery, @PathVariable String collection) throws IOException, VisitorCreationException, TranslationException {
+        return ResponseEntity.ok(queryService.search(elasticQuery, collection));
     }
 }
