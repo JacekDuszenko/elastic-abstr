@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface QueryService {
 
-    List search(String elasticQuery, String collection) throws IOException, VisitorCreationException, TranslationException;
+    List search(String elasticQuery, String collection, Boolean verbose) throws IOException, VisitorCreationException, TranslationException;
 }

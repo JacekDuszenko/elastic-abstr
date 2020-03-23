@@ -1,4 +1,4 @@
-package pl.jacekduszenko.abstr.integration;
+package pl.jacekduszenko.abstr.integration.mongo;
 
 import io.vavr.collection.Stream;
 import lombok.RequiredArgsConstructor;

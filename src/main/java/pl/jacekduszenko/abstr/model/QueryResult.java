@@ -2,10 +2,10 @@ package pl.jacekduszenko.abstr.model;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class QueryResult {
 
-    private final List rawResult;
+    private final Map<String, Object> rawResult;
 }

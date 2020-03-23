@@ -21,6 +21,7 @@ public class BooleanQueryVisitor implements QueryVisitor<BooleanQuery, MongoQuer
     @SneakyThrows
     private void visitChild(MongoQueryBuilder builder, BooleanClause clause) {
         QueryVisitor visitor = MongoVisitorFactory.createVisitorForQuery(clause.getQuery());
+        //TODO write a boolean query context aware wrapper visitor and decorate visitor with it, after that, just visit from this visitor.
         visitor.visit(clause.getQuery(), builder);
     }
 }

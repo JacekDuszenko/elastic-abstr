@@ -27,7 +27,7 @@ public class MongoQueryServiceTest {
     @Ignore
     void shouldTranslateQueryAndReturnValidResultsFromMongo() throws Exception {
         String validElasticsearchQuery = ElasticsearchQueryProvider.loadElasticQueryFromFile("boosting_query.json");
-        queryService.search(validElasticsearchQuery,"mongoMockData");
+        queryService.search(validElasticsearchQuery,"mongoMockData", false);
         //TODO implement rest of the test after custom lucene parser implemented
     }
 }

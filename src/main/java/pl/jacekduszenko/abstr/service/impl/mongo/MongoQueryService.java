@@ -4,14 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
+import org.bson.Document;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import pl.jacekduszenko.abstr.model.MongoEntityMapping;
+import pl.jacekduszenko.abstr.model.exception.TranslationException;
+import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.QueryService;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
+import static pl.jacekduszenko.abstr.integration.mongo.MongoSpecificFields.mongoSpecificFields;
 
 @Service
 @Slf4j
@@ -23,13 +30,27 @@ public class MongoQueryService implements QueryService {
     private final MongoTemplate mongoTemplate;
 
     @SneakyThrows
-    public List search(String elasticQuery, String collection) {
-        Query luceneQuery = indexQueryParserService.parse(elasticQuery).query();
-        org.springframework.data.mongodb.core.query.Query q = luceneToMongoTranslator.translateFromLuceneQuery(luceneQuery);
-        return mongoTemplate.find(q, findEntityClassByCollectionName(collection));
+    public List search(String elasticQuery, String collection, Boolean verbose) {
+        Query luceneQuery = translateEsToLucene(elasticQuery);
+        org.springframework.data.mongodb.core.query.Query q = translateLuceneToMongo(luceneQuery);
+        List<Document> verboseResults = getSchemalessResultStream(collection, q).collect(Collectors.toList());
+        return verbose ? verboseResults : filterMongoSpecificFields(verboseResults);
     }
 
-    private Class<?> findEntityClassByCollectionName(String collection) {
-        return MongoEntityMapping.mapping.get(collection);
+    private List filterMongoSpecificFields(List<Document> verboseResults) {
+        return verboseResults.stream().peek(doc -> mongoSpecificFields.forEach(doc::remove)).collect(Collectors.toList());
+    }
+
+    private Query translateEsToLucene(String elasticQuery) {
+        return indexQueryParserService.parse(elasticQuery).query();
+    }
+
+    private org.springframework.data.mongodb.core.query.Query translateLuceneToMongo(Query luceneQuery) throws VisitorCreationException, TranslationException {
+        return luceneToMongoTranslator.translateFromLuceneQuery(luceneQuery);
+    }
+
+    private Stream<Document> getSchemalessResultStream(String collection, org.springframework.data.mongodb.core.query.Query q) {
+        Iterable<Document> results = () -> mongoTemplate.getCollection(collection).find(q.getQueryObject()).cursor();
+        return StreamSupport.stream(results.spliterator(), false);
     }
 }
