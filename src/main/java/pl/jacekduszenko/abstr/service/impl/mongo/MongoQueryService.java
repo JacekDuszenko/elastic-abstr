@@ -31,14 +31,14 @@ public class MongoQueryService implements QueryService {
 
     @SneakyThrows
     public List search(String elasticQuery, String collection, Boolean verbose) {
-        Query luceneQuery = translateEsToLucene(elasticQuery);
-        org.springframework.data.mongodb.core.query.Query q = translateLuceneToMongo(luceneQuery);
+        org.springframework.data.mongodb.core.query.Query q = obtainMongoQuery(elasticQuery);
         List<Document> verboseResults = getSchemalessResultStream(collection, q).collect(Collectors.toList());
         return verbose ? verboseResults : filterMongoSpecificFields(verboseResults);
     }
 
-    private List filterMongoSpecificFields(List<Document> verboseResults) {
-        return verboseResults.stream().peek(doc -> mongoSpecificFields.forEach(doc::remove)).collect(Collectors.toList());
+    private org.springframework.data.mongodb.core.query.Query obtainMongoQuery(String elasticQuery) throws VisitorCreationException, TranslationException {
+        Query luceneQuery = translateEsToLucene(elasticQuery);
+        return translateLuceneToMongo(luceneQuery);
     }
 
     private Query translateEsToLucene(String elasticQuery) {
@@ -47,6 +47,10 @@ public class MongoQueryService implements QueryService {
 
     private org.springframework.data.mongodb.core.query.Query translateLuceneToMongo(Query luceneQuery) throws VisitorCreationException, TranslationException {
         return luceneToMongoTranslator.translateFromLuceneQuery(luceneQuery);
+    }
+
+    private List filterMongoSpecificFields(List<Document> verboseResults) {
+        return verboseResults.stream().peek(doc -> mongoSpecificFields.forEach(doc::remove)).collect(Collectors.toList());
     }
 
     private Stream<Document> getSchemalessResultStream(String collection, org.springframework.data.mongodb.core.query.Query q) {

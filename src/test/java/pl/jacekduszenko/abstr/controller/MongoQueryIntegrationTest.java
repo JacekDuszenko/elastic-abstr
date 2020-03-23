@@ -4,7 +4,6 @@ import es.query.builder.ElasticQueryStringBuilder;
 import io.vavr.Tuple;
 import io.vavr.collection.List;
 import org.bson.Document;
-import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +19,7 @@ import pl.jacekduszenko.abstr.api.ApiCaller;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AbstrApplication.class)
@@ -53,11 +53,11 @@ public class MongoQueryIntegrationTest {
         java.util.List<Map<String, Object>> docs = apiCaller.callSearchApi(queryString, mockMongoData, false);
 
         //then
-        MatcherAssert.assertThat(docs.size(), is(1));
-        MatcherAssert.assertThat(docs.get(0).get("name"), is("developer"));
-        MatcherAssert.assertThat(docs.get(0).get("age"), is(100));
-        MatcherAssert.assertThat(docs.get(0).get("finished"), is(true));
-
+        assertThat(docs.size(), is(1));
+        assertThat(docs.get(0).get("name"), is("developer"));
+        assertThat(docs.get(0).get("age"), is(100));
+        assertThat(docs.get(0).get("finished"), is(true));
+        assertThat(docs.get(0).size(), is(3));
     }
 
     private void insertThreeValueRecordToMockMongoDataCollection(String stringValue, Integer intValue, Boolean boolValue) {
