@@ -56,7 +56,6 @@ public class MongoQueryBuilder {
                                 .onFailure(c -> parseFailureConsumer.accept(value))));
     }
 
-
     private void addTwoValueCriterionForInferedType(String valueFirst, String valueSecond, Consumer<Tuple2> criterionConsumer) {
         Try.of(() -> Tuple.of(Integer.parseInt(valueFirst), Integer.parseInt(valueSecond)))
                 .onSuccess(criterionConsumer)

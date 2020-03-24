@@ -79,7 +79,6 @@ public class LuceneToMongoTranslatorTest {
         assertThat(range.get("$lte"), is(30000));
     }
 
-
     @SneakyThrows
     private Map<String, Object> mongoQueryAsMap(String queryString) {
         Query luceneQ = LuceneQueryProvider.fromString(queryString);

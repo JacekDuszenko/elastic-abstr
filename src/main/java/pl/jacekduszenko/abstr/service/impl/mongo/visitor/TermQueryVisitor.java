@@ -7,6 +7,7 @@ import pl.jacekduszenko.abstr.service.QueryVisitor;
 
 @Slf4j
 public class TermQueryVisitor implements QueryVisitor<TermQuery, MongoQueryBuilder> {
+
     @Override
     public void visit(TermQuery query, MongoQueryBuilder builder) {
         builder.withIsClause(query.getTerm().field(), query.getTerm().text());

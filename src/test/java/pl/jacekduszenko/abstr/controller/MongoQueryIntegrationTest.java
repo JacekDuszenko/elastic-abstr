@@ -74,7 +74,6 @@ public class MongoQueryIntegrationTest {
         //then
         assertThat(docs.size(), is(3));
         docs.forEach(doc -> assertThat(doc.get("name"), is("developer")));
-
     }
 
     private void insertThreeValueRecordToMockMongoDataCollection(String stringValue, Integer intValue, Boolean boolValue) {
