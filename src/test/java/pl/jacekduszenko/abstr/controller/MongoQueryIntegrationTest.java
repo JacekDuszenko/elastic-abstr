@@ -60,6 +60,23 @@ public class MongoQueryIntegrationTest {
         assertThat(docs.get(0).size(), is(3));
     }
 
+    @Test
+    public void shouldReturnAllThreeMatchingRecords() throws Exception {
+        //given
+        insertThreeValueRecordToMockMongoDataCollection("developer", 100, true);
+        insertThreeValueRecordToMockMongoDataCollection("developer", 200, false);
+        insertThreeValueRecordToMockMongoDataCollection("developer", 300, true);
+
+        //when
+        String queryString = builder.createMatchQuery(List.of(Tuple.of("name", "developer")));
+        java.util.List<Map<String, Object>> docs = apiCaller.callSearchApi(queryString, mockMongoData, false);
+
+        //then
+        assertThat(docs.size(), is(3));
+        docs.forEach(doc -> assertThat(doc.get("name"), is("developer")));
+
+    }
+
     private void insertThreeValueRecordToMockMongoDataCollection(String stringValue, Integer intValue, Boolean boolValue) {
         insertData(Map.of("name", stringValue, "age", intValue, "finished", boolValue), mockMongoData);
     }
