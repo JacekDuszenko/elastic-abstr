@@ -2,6 +2,7 @@ package pl.jacekduszenko.abstr.service.impl.mongo;
 
 import lombok.SneakyThrows;
 import org.apache.lucene.search.Query;
+import org.bson.Document;
 import org.junit.Before;
 import org.junit.Test;
 import pl.jacekduszenko.abstr.data.LuceneQueryProvider;
@@ -16,7 +17,9 @@ import static org.junit.Assert.assertThat;
 public class LuceneToMongoTranslatorTest {
 
     private static final String multiMatchQueryString = "+rating:4.5 +stringField:verygood +intField:13 +boolField:true";
-    public static final String rangeQueryString = "+balance:[20000 TO 30000]";
+    public static final String closedIntervalsRangeQueryString = "+balance:[20000 TO 30000]";
+    public static final String openIntervalsRangeQueryString = "+balance:{20000 TO 30000}";
+    public static final String leftOpenRightClosedIntervalQueryString = "+balance:{20000 TO 30000]";
 
     private LuceneToMongoTranslator luceneToMongoTranslator;
 
@@ -38,14 +41,44 @@ public class LuceneToMongoTranslatorTest {
     }
 
     @Test
-    public void translateRangeQuery() {
+    public void shouldTranslateClosedIntervalsQueryString() {
         //when
-        Map<String, Object> result = mongoQueryAsMap(rangeQueryString);
+        Map<String, Object> result = mongoQueryAsMap(closedIntervalsRangeQueryString);
 
         //then
         assertThat(result, is(notNullValue()));
-
+        assertThat(result.size(), is(1));
+        Document range = (Document) result.get("balance");
+        assertThat(range.get("$gte"), is(20000));
+        assertThat(range.get("$lte"), is(30000));
     }
+
+    @Test
+    public void shouldTranslateOpenIntervalsQueryString() {
+        //when
+        Map<String, Object> result = mongoQueryAsMap(openIntervalsRangeQueryString);
+
+        //then
+        assertThat(result, is(notNullValue()));
+        assertThat(result.size(), is(1));
+        Document range = (Document) result.get("balance");
+        assertThat(range.get("$gt"), is(20000));
+        assertThat(range.get("$lt"), is(30000));
+    }
+
+    @Test
+    public void shouldTranslateLeftOpenRightClosedIntervalQueryString() {
+        //when
+        Map<String, Object> result = mongoQueryAsMap(leftOpenRightClosedIntervalQueryString);
+
+        //then
+        assertThat(result, is(notNullValue()));
+        assertThat(result.size(), is(1));
+        Document range = (Document) result.get("balance");
+        assertThat(range.get("$gt"), is(20000));
+        assertThat(range.get("$lte"), is(30000));
+    }
+
 
     @SneakyThrows
     private Map<String, Object> mongoQueryAsMap(String queryString) {
