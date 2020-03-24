@@ -2,7 +2,7 @@ package pl.jacekduszenko.abstr.service.impl.mongo;
 
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import pl.jacekduszenko.abstr.model.MongoQueryBuilder;
+import pl.jacekduszenko.abstr.service.impl.mongo.builder.MongoQueryBuilder;
 import pl.jacekduszenko.abstr.model.exception.TranslationException;
 import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.LuceneTranslator;

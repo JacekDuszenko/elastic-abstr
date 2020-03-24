@@ -2,7 +2,7 @@ package pl.jacekduszenko.abstr.service.impl.mongo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
-import pl.jacekduszenko.abstr.model.MongoQueryBuilder;
+import pl.jacekduszenko.abstr.service.impl.mongo.builder.MongoQueryBuilder;
 import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.QueryVisitor;
 

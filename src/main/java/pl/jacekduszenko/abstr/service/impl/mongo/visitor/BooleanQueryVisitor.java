@@ -3,7 +3,7 @@ package pl.jacekduszenko.abstr.service.impl.mongo.visitor;
 import lombok.SneakyThrows;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import pl.jacekduszenko.abstr.model.MongoQueryBuilder;
+import pl.jacekduszenko.abstr.service.impl.mongo.builder.MongoQueryBuilder;
 import pl.jacekduszenko.abstr.service.QueryVisitor;
 import pl.jacekduszenko.abstr.service.impl.mongo.MongoVisitorFactory;
 
