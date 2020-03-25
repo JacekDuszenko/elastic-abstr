@@ -3,12 +3,12 @@ package pl.jacekduszenko.abstr.service.impl.mongo;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.util.BytesRef;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
 import pl.jacekduszenko.abstr.service.QueryVisitor;
 import pl.jacekduszenko.abstr.service.impl.mongo.visitor.*;
 
-import static org.junit.Assert.assertTrue;
 
 public class MongoVisitorFactoryTest {
 
@@ -47,7 +47,7 @@ public class MongoVisitorFactoryTest {
         QueryVisitor qw = MongoVisitorFactory.createVisitorForQuery(testQuery);
 
         //then
-        assertTrue(assertedVisitorClass.isInstance(qw));
+        Assertions.assertTrue(assertedVisitorClass.isInstance(qw));
     }
 
     private TermRangeQuery createMockRangeQuery() {

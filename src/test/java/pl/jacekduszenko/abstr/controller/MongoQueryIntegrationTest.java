@@ -4,9 +4,8 @@ import es.query.builder.ElasticQueryStringBuilder;
 import io.vavr.Tuple;
 import io.vavr.collection.List;
 import org.bson.Document;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = AbstrApplication.class)
 @AutoConfigureMockMvc
 public class MongoQueryIntegrationTest {
@@ -36,7 +34,7 @@ public class MongoQueryIntegrationTest {
 
     private ApiCaller apiCaller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mongoTemplate.getDb().drop();
         apiCaller = new ApiCaller(mockMvc);
@@ -49,7 +47,7 @@ public class MongoQueryIntegrationTest {
         insertThreeValueRecordToMockMongoDataCollection("notMatchingRecord", 200, false);
 
         //when
-        String queryString = builder.createMatchQuery(List.of(Tuple.of("name", "developer"), Tuple.of("age", 100), Tuple.of("finished", true)));
+        String queryString = builder.matchQuery(List.of(Tuple.of("name", "developer"), Tuple.of("age", 100), Tuple.of("finished", true)));
         java.util.List<Map<String, Object>> docs = apiCaller.callSearchApi(queryString, mockMongoData, false);
 
         //then
@@ -68,7 +66,7 @@ public class MongoQueryIntegrationTest {
         insertThreeValueRecordToMockMongoDataCollection("developer", 300, true);
 
         //when
-        String queryString = builder.createMatchQuery(List.of(Tuple.of("name", "developer")));
+        String queryString = builder.matchQuery(List.of(Tuple.of("name", "developer")));
         java.util.List<Map<String, Object>> docs = apiCaller.callSearchApi(queryString, mockMongoData, false);
 
         //then

@@ -3,8 +3,8 @@ package pl.jacekduszenko.abstr.service.impl.mongo;
 import lombok.SneakyThrows;
 import org.apache.lucene.search.Query;
 import org.bson.Document;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.data.LuceneQueryProvider;
 
 import java.util.Map;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LuceneToMongoTranslatorTest {
 
@@ -23,7 +23,7 @@ public class LuceneToMongoTranslatorTest {
 
     private LuceneToMongoTranslator luceneToMongoTranslator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         luceneToMongoTranslator = new LuceneToMongoTranslator();
     }

@@ -1,5 +1,7 @@
 package pl.jacekduszenko.abstr.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.apache.lucene.queries.BoostingQuery;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.ConstantScoreQuery;
@@ -7,19 +9,19 @@ import org.apache.lucene.search.Query;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.elasticsearch.index.query.ParsedQuery;
 import org.hamcrest.Matchers;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import pl.jacekduszenko.abstr.config.ElasticParserServiceConfig;
+import pl.jacekduszenko.abstr.config.ObjectMapperConfig;
 import pl.jacekduszenko.abstr.data.ElasticsearchQueryProvider;
+import pl.jacekduszenko.abstr.service.impl.mongo.MongoQueryPartExtractor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = ElasticParserServiceConfig.class)
+@SpringBootTest(classes = {ElasticParserServiceConfig.class, ObjectMapperConfig.class})
 public class IndexQueryParserServiceTest {
 
     private final static String validLuceneBoostingDsl = "text:apple/text:pie tart fruit crumble tree^0.0";
@@ -30,6 +32,15 @@ public class IndexQueryParserServiceTest {
 
     @Autowired
     private IndexQueryParserService indexQueryParserService;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private MongoQueryPartExtractor mongoQueryPartExtractor;
+
+    @BeforeEach
+    public void setUp() {
+        mongoQueryPartExtractor = new MongoQueryPartExtractor(objectMapper);
+    }
 
     @Test
     public void shouldParseBoostingQueryCorrectly() {
@@ -56,12 +67,14 @@ public class IndexQueryParserServiceTest {
         testQueryFromFile("aggregated_query.json", validLuceneAggregatedDsl, BooleanQuery.class);
     }
 
+    @SneakyThrows
     private void testQueryFromFile(String filename, String assertedLuceneQuery, Class assertedClass) {
         //given
         String contents = ElasticsearchQueryProvider.loadElasticQueryFromFile(filename);
+        String matchQueryPart = mongoQueryPartExtractor.extractMatchAndAggregatePartFromQuery(contents)._1;
 
         //when
-        ParsedQuery parsedQuery = indexQueryParserService.parse(contents);
+        ParsedQuery parsedQuery = indexQueryParserService.parse(matchQueryPart);
         Query query = parsedQuery.query();
 
         //then
