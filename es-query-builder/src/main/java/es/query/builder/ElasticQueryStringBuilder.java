@@ -19,9 +19,11 @@ public class ElasticQueryStringBuilder {
         JSONArray mustObject = new JSONArray();
         keyValuePair.map(this::tupleToMatchObject)
                 .forEach(mustObject::appendElement);
-        return new JSONObject()
+        JSONObject matchObject = new JSONObject()
                 .appendField(BOOL_KEY, new JSONObject()
-                        .appendField(MUST_KEY, mustObject)).toJSONString();
+                        .appendField(MUST_KEY, mustObject));
+
+        return new JSONObject().appendField("query", matchObject).toJSONString();
     }
 
     private JSONObject tupleToMatchObject(Tuple2<String, Object> tpl) {

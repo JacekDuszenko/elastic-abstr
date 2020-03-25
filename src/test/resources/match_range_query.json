@@ -1,17 +1,19 @@
 {
-  "bool": {
-    "must": [
-      {
-        "match_all": {}
-      },
-      {
-        "range": {
-          "balance": {
-            "gte": 20000,
-            "lte": 30000
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match_all": {}
+        },
+        {
+          "range": {
+            "balance": {
+              "gte": 20000,
+              "lte": 30000
+            }
           }
         }
-      }
-    ]
+      ]
+    }
   }
 }

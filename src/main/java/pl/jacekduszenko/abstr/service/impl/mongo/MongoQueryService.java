@@ -1,5 +1,6 @@
 package pl.jacekduszenko.abstr.service.impl.mongo;
 
+import io.vavr.Tuple2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import pl.jacekduszenko.abstr.model.exception.TranslationException;
 import pl.jacekduszenko.abstr.model.exception.VisitorCreationException;
+import pl.jacekduszenko.abstr.service.QueryPartExtractor;
 import pl.jacekduszenko.abstr.service.QueryService;
 
 import java.util.List;
@@ -25,9 +27,11 @@ import static pl.jacekduszenko.abstr.integration.mongo.MongoSpecificFields.mongo
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MongoQueryService implements QueryService {
 
+
     private final IndexQueryParserService indexQueryParserService;
     private final LuceneToMongoTranslator luceneToMongoTranslator;
     private final MongoTemplate mongoTemplate;
+    private final QueryPartExtractor<String, String> extractor;
 
     @SneakyThrows
     public List search(String elasticQuery, String collection, Boolean verbose) {
@@ -37,7 +41,8 @@ public class MongoQueryService implements QueryService {
     }
 
     private org.springframework.data.mongodb.core.query.Query obtainMongoQuery(String elasticQuery) throws VisitorCreationException, TranslationException {
-        Query luceneQuery = translateEsToLucene(elasticQuery);
+        Tuple2<String, String> matchAndAggregation = extractor.extractMatchAndAggregatePartFromQuery(elasticQuery);
+        Query luceneQuery = translateEsToLucene(matchAndAggregation._1);
         return translateLuceneToMongo(luceneQuery);
     }
 
