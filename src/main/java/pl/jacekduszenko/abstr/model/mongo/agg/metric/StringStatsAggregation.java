@@ -4,9 +4,9 @@ import org.bson.conversions.Bson;
 
 import java.util.Map;
 
-public class StatsAggregation extends BaseMongoAggregation {
+public class StringStatsAggregation extends BaseMongoAggregation {
 
-    public StatsAggregation(Map<String, Object> rawDataChunk) {
+    public StringStatsAggregation(Map<String, Object> rawDataChunk) {
         super(rawDataChunk);
     }
 
