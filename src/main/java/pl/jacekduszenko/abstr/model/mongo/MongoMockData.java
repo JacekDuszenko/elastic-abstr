@@ -1,4 +1,4 @@
-package pl.jacekduszenko.abstr.model;
+package pl.jacekduszenko.abstr.model.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

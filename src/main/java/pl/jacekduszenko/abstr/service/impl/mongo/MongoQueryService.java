@@ -1,5 +1,6 @@
 package pl.jacekduszenko.abstr.service.impl.mongo;
 
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Aggregates;
 import io.vavr.Tuple2;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,6 @@ import static pl.jacekduszenko.abstr.integration.mongo.MongoSpecificFields.mongo
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MongoQueryService implements QueryService {
-
 
     private final IndexQueryParserService indexQueryParserService;
     private final LuceneToMongoTranslator luceneToMongoTranslator;

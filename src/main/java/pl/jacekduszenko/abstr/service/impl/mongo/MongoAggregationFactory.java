@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.jacekduszenko.abstr.model.MongoAggregationQuery;
+import pl.jacekduszenko.abstr.model.mongo.agg.MongoAggregation;
 import pl.jacekduszenko.abstr.service.AggregationFactory;
 
 import java.util.List;
@@ -19,11 +19,11 @@ public class MongoAggregationFactory implements AggregationFactory<List<Bson>, S
     private final MongoAggregationsObjectMapper mongoAggregationsObjectMapper;
 
     public List<Bson> fromQueryString(String aggregationsQuery) {
-        List<MongoAggregationQuery> aggs = mongoAggregationsObjectMapper.mapQueryStringToAggregations(aggregationsQuery);
+        List<MongoAggregation> aggs = mongoAggregationsObjectMapper.mapQueryStringToAggregations(aggregationsQuery);
         return convertAggregationsToBson(aggs);
     }
 
-    private List<Bson> convertAggregationsToBson(List<MongoAggregationQuery> aggs) {
-        return aggs.stream().map(MongoAggregationQuery::asBson).collect(Collectors.toList());
+    private List<Bson> convertAggregationsToBson(List<MongoAggregation> aggs) {
+        return aggs.stream().map(MongoAggregation::convertToLanguageSpecific).collect(Collectors.toList());
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-import pl.jacekduszenko.abstr.model.MongoMockData;
+import pl.jacekduszenko.abstr.model.mongo.MongoMockData;
 
 import java.util.List;
 
