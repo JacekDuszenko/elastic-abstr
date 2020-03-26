@@ -1,11 +1,13 @@
 package pl.jacekduszenko.abstr.service.impl.mongo;
 
+import com.mongodb.client.model.Aggregates;
 import io.vavr.Tuple2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.Query;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -32,21 +34,33 @@ public class MongoQueryService implements QueryService {
     private final LuceneToMongoTranslator luceneToMongoTranslator;
     private final MongoTemplate mongoTemplate;
     private final QueryPartExtractor<String, String> extractor;
+    private final MongoAggregationFactory mongoAggregationFactory;
 
     @SneakyThrows
     public List search(String elasticQuery, String collection, Boolean verbose) {
-        org.springframework.data.mongodb.core.query.Query q = obtainMongoQuery(elasticQuery);
-        Stream<Document> verboseResults = getSchemalessResultStream(collection, q);
+        List<Bson> queryConditions = createQueryConditions(elasticQuery);
+        Stream<Document> verboseResults = getSchemalessResultStream(collection, queryConditions);
         return verbose ? asList(verboseResults) : asList(filterMongoSpecificFields(verboseResults));
     }
 
-    private org.springframework.data.mongodb.core.query.Query obtainMongoQuery(String elasticQuery) throws VisitorCreationException, TranslationException {
+    private List<Bson> createQueryConditions(String elasticQuery) throws VisitorCreationException, TranslationException {
         Tuple2<String, String> matchAndAggregation = extractor.extractMatchAndAggregatePartFromQuery(elasticQuery);
-        Query luceneQuery = translateEsToLucene(matchAndAggregation._1);
-        return translateLuceneToMongo(luceneQuery);
+        org.springframework.data.mongodb.core.query.Query matchQuery = obtainMatchQuery(matchAndAggregation._1);
+        List<Bson> conditions = obtainAggregations(matchAndAggregation._2);
+        conditions.add(Aggregates.match(matchQuery.getQueryObject()));
+        return conditions;
     }
 
-    private Query translateEsToLucene(String elasticQuery) {
+    private List<Bson> obtainAggregations(String s) {
+        return mongoAggregationFactory.fromQueryString(s);
+    }
+
+    private org.springframework.data.mongodb.core.query.Query obtainMatchQuery(String matchQuery) throws VisitorCreationException, TranslationException {
+        Query luceneMatchQuery = translateElasticsearchQueryToLucene(matchQuery);
+        return translateLuceneToMongo(luceneMatchQuery);
+    }
+
+    private Query translateElasticsearchQueryToLucene(String elasticQuery) {
         return indexQueryParserService.parse(elasticQuery).query();
     }
 
@@ -58,8 +72,8 @@ public class MongoQueryService implements QueryService {
         return verboseResults.peek(doc -> mongoSpecificFields.forEach(doc::remove));
     }
 
-    private Stream<Document> getSchemalessResultStream(String collection, org.springframework.data.mongodb.core.query.Query q) {
-        Iterable<Document> results = () -> mongoTemplate.getCollection(collection).find(q.getQueryObject()).cursor();
+    private Stream<Document> getSchemalessResultStream(String collection, List<Bson> conditions) {
+        Iterable<Document> results = () -> mongoTemplate.getCollection(collection).aggregate(conditions).iterator();
         return StreamSupport.stream(results.spliterator(), false);
     }
 
