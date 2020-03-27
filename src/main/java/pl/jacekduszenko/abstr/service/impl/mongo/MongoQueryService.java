@@ -1,7 +1,5 @@
 package pl.jacekduszenko.abstr.service.impl.mongo;
 
-import com.mongodb.client.model.Accumulators;
-import com.mongodb.client.model.Aggregates;
 import io.vavr.Tuple2;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -23,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static com.mongodb.client.model.Aggregates.match;
 import static pl.jacekduszenko.abstr.integration.mongo.MongoSpecificFields.mongoSpecificFields;
 
 @Service
@@ -47,8 +46,13 @@ public class MongoQueryService implements QueryService {
         Tuple2<String, String> matchAndAggregation = extractor.extractMatchAndAggregatePartFromQuery(elasticQuery);
         org.springframework.data.mongodb.core.query.Query matchQuery = obtainMatchQuery(matchAndAggregation._1);
         List<Bson> conditions = obtainAggregations(matchAndAggregation._2);
-        conditions.add(Aggregates.match(matchQuery.getQueryObject()));
+        addMatchQueryToConditions(matchQuery, conditions);
         return conditions;
+    }
+
+    private void addMatchQueryToConditions(org.springframework.data.mongodb.core.query.Query matchQuery, List<Bson> conditions) {
+        Bson queryObject = matchQuery.getQueryObject();
+        conditions.add(match(queryObject));
     }
 
     private List<Bson> obtainAggregations(String s) {
