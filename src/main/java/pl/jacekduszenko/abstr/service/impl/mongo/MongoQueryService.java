@@ -46,17 +46,17 @@ public class MongoQueryService implements QueryService {
         Tuple2<String, String> matchAndAggregation = extractor.extractMatchAndAggregatePartFromQuery(elasticQuery);
         org.springframework.data.mongodb.core.query.Query matchQuery = obtainMatchQuery(matchAndAggregation._1);
         List<Bson> conditions = obtainAggregations(matchAndAggregation._2);
-        addMatchQueryToConditions(matchQuery, conditions);
+        prependMatchQueryToAggregations(matchQuery, conditions);
         return conditions;
     }
 
-    private void addMatchQueryToConditions(org.springframework.data.mongodb.core.query.Query matchQuery, List<Bson> conditions) {
+    private void prependMatchQueryToAggregations(org.springframework.data.mongodb.core.query.Query matchQuery, List<Bson> conditions) {
         Bson queryObject = matchQuery.getQueryObject();
-        conditions.add(match(queryObject));
+        conditions.add(0, match(queryObject));
     }
 
     private List<Bson> obtainAggregations(String s) {
-        return mongoAggregationFactory.fromQueryString(s);
+        return mongoAggregationFactory.fromAggregationString(s);
     }
 
     private org.springframework.data.mongodb.core.query.Query obtainMatchQuery(String matchQuery) throws VisitorCreationException, TranslationException {

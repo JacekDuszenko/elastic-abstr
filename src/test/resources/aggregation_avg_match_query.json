@@ -1,0 +1,20 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "developer"
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "avg_age": {
+      "avg": {
+        "field": "age"
+      }
+    }
+  }
+}

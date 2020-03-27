@@ -1,0 +1,20 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "developer"
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "sum_age": {
+      "sum": {
+        "field": "age"
+      }
+    }
+  }
+}

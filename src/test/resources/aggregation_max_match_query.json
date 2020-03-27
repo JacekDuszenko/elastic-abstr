@@ -1,0 +1,20 @@
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "name": "developer"
+          }
+        }
+      ]
+    }
+  },
+  "aggs": {
+    "max_age": {
+      "max": {
+        "field": "age"
+      }
+    }
+  }
+}

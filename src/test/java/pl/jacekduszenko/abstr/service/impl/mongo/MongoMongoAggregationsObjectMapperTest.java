@@ -14,7 +14,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 class MongoMongoAggregationsObjectMapperTest {
 
-    private final String AVG_QUERY_FILENAME = "aggregation_match_query.json";
+    private final static String AVG_QUERY_FILENAME = "aggregation_match_query.json";
+
     private MongoAggregationsObjectMapper mongoAggregationsObjectMapper;
 
     @BeforeEach
@@ -33,6 +34,6 @@ class MongoMongoAggregationsObjectMapperTest {
         //then
         assertThat(aggregations.size(), is(1));
         MongoAggregation averageAggregation = aggregations.get(0);
-        assertThat(aggregations.getClass(), is(AvgAggregation.class));
+        assertThat(averageAggregation.getClass(), is(AvgAggregation.class));
     }
 }
