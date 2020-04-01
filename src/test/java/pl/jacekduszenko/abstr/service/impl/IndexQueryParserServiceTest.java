@@ -6,6 +6,7 @@ import org.apache.lucene.queries.BoostingQuery;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.ConstantScoreQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermRangeQuery;
 import org.elasticsearch.index.query.IndexQueryParserService;
 import org.elasticsearch.index.query.ParsedQuery;
 import org.hamcrest.Matchers;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.jacekduszenko.abstr.config.ElasticParserServiceConfig;
 import pl.jacekduszenko.abstr.config.ObjectMapperConfig;
 import pl.jacekduszenko.abstr.data.ElasticsearchQueryProvider;
+import pl.jacekduszenko.abstr.data.LuceneQueryProvider;
 import pl.jacekduszenko.abstr.service.impl.mongo.MongoQueryPartExtractor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,9 +31,11 @@ public class IndexQueryParserServiceTest {
     private final static String validLuceneMatchDsl = "+rating:4.5 +stringField:verygood +intField:13 +boolField:true";
     private final static String validLuceneRangeDsl = "+ConstantScore(*:*) +balance:[20000 TO 30000]";
     private final static String validLuceneAggregatedDsl = "+size:0";
+    public static final String validLuceneDateRangeDsl = "expirationDate:{2020-03-03T00:00:00.000Z TO 2020-03-06T00:00:00.000Z}";
 
     @Autowired
     private IndexQueryParserService indexQueryParserService;
+
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -65,6 +69,11 @@ public class IndexQueryParserServiceTest {
     @Test
     public void shouldParseAggregationQueryCorrectly() {
         testQueryFromFile("aggregated_query.json", validLuceneAggregatedDsl, BooleanQuery.class);
+    }
+
+    @Test
+    public void shouldParseDateRangeQueryCorrectly() {
+        testQueryFromFile("aggregation_term_date_histogram_query.json", validLuceneDateRangeDsl, TermRangeQuery.class);
     }
 
     @SneakyThrows

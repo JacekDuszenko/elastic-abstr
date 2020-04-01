@@ -13,9 +13,7 @@ public class LuceneToMongoTranslator implements LuceneTranslator<Query> {
 
     @Override
     public Query translateFromLuceneQuery(org.apache.lucene.search.Query luceneQuery) throws VisitorCreationException, TranslationException {
-        Query matchQuery = translateMatchQuery(luceneQuery);
-
-        return matchQuery;
+        return translateMatchQuery(luceneQuery);
     }
 
     @SuppressWarnings("unchecked")

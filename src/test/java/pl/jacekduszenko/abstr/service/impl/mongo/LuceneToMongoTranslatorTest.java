@@ -5,8 +5,11 @@ import org.apache.lucene.search.Query;
 import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.jacekduszenko.abstr.data.ElasticsearchQueryProvider;
 import pl.jacekduszenko.abstr.data.LuceneQueryProvider;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,7 @@ public class LuceneToMongoTranslatorTest {
     public static final String closedIntervalsRangeQueryString = "+balance:[20000 TO 30000]";
     public static final String openIntervalsRangeQueryString = "+balance:{20000 TO 30000}";
     public static final String leftOpenRightClosedIntervalQueryString = "+balance:{20000 TO 30000]";
+    public static final String dateRangeQueryString = "expirationDate:{2020-03-03T00:00:00.000Z TO 2020-03-06T00:00:00.000Z}";
 
     private LuceneToMongoTranslator luceneToMongoTranslator;
 
@@ -77,6 +81,23 @@ public class LuceneToMongoTranslatorTest {
         Document range = (Document) result.get("balance");
         assertThat(range.get("$gt"), is(20000));
         assertThat(range.get("$lte"), is(30000));
+    }
+
+
+    @Test
+    public void shouldTranslateDateRangeQueryString() {
+        //given
+        LocalDateTime validDateFrom = LocalDateTime.of(2020, 3, 3, 0, 0);
+        LocalDateTime validDateTo = LocalDateTime.of(2020, 3, 6, 0, 0);
+
+        //when
+        Map<String, Object> result = mongoQueryAsMap(dateRangeQueryString);
+
+        //then
+        assertThat(result, is(notNullValue()));
+        assertThat(result.size(), is(1));
+        Document dateRange = (Document) result.get("expiration_date");
+        assertThat(dateRange.get("$gt"), is(new Date()));
     }
 
     @SneakyThrows
