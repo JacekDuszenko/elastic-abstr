@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "e3edfbb8-eb9a-4eea-8e04-91bb76247937",
+		"name": "elasticsearch middleoffice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Events by Expiry Date",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"query\" : {\r\n\r\n\t\t\t\t\t\"range\" : {\r\n\t\t\t\t\t\t\"expirationDate\" : {\r\n\t\t\t\t\t\t\t\"gt\" : \"2020-03-03T00:00:00.000Z\",\r\n\t\t\t\t\t\t\t\"lt\" : \"2020-03-06T00:00:00.000Z\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t},\r\n    \"aggs\" : {\r\n\t\t\"regions\" : {\r\n\t\t\t\"terms\" : {\r\n\t\t\t\t\"field\" : \"region\",\r\n\t\t\t\t\"min_doc_count\": 0\r\n\t\t\t},\r\n\t\t\t\"aggs\" : {\r\n\t\t\t\t\"dayByDay\" : {\r\n\t\t    \t\t\"date_histogram\" : {\r\n\t\t        \t\t\"field\" : \"expirationDate\",\r\n\t\t        \t\t\"interval\" : \"day\",\r\n\t\t        \t\t\"min_doc_count\": 0,\r\n\t\t        \t\t\"extended_bounds\" : {\r\n\t\t        \t\t\t\"min\" : 1583193600000,\r\n\t\t        \t\t\t\"max\" : 1583452800000\r\n\t\t        \t\t}\r\n\t\t    \t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Events by Expiry Date",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"query\" : {\r\n\r\n\t\t\t\t\t\"range\" : {\r\n\t\t\t\t\t\t\"expirationDate\" : {\r\n\t\t\t\t\t\t\t\"gt\" : \"2020-03-03T00:00:00.000Z\",\r\n\t\t\t\t\t\t\t\"lt\" : \"2020-03-06T00:00:00.000Z\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t},\r\n    \"aggs\" : {\r\n\t\t\"regions\" : {\r\n\t\t\t\"terms\" : {\r\n\t\t\t\t\"field\" : \"region\",\r\n\t\t\t\t\"min_doc_count\": 0\r\n\t\t\t},\r\n\t\t\t\"aggs\" : {\r\n\t\t\t\t\"dayByDay\" : {\r\n\t\t    \t\t\"date_histogram\" : {\r\n\t\t        \t\t\"field\" : \"expirationDate\",\r\n\t\t        \t\t\"interval\" : \"day\",\r\n\t\t        \t\t\"min_doc_count\": 0,\r\n\t\t        \t\t\"extended_bounds\" : {\r\n\t\t        \t\t\t\"min\" : 1583193600000,\r\n\t\t        \t\t\t\"max\" : 1583452800000\r\n\t\t        \t\t}\r\n\t\t    \t\t}\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9200/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_search"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Warning",
+							"value": "299 Elasticsearch-7.6.1-aa751e09be0a5072e8570670309b1f12348f023b \"[interval] on [date_histogram] is deprecated, use [fixed_interval] or [calendar_interval] in the future.\""
+						},
+						{
+							"key": "content-type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "content-encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "content-length",
+							"value": "5977"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"took\": 8,\n    \"timed_out\": false,\n    \"_shards\": {\n        \"total\": 5,\n        \"successful\": 5,\n        \"skipped\": 0,\n        \"failed\": 0\n    },\n    \"hits\": {\n        \"total\": {\n            \"value\": 10,\n            \"relation\": \"eq\"\n        },\n        \"max_score\": 1,\n        \"hits\": [\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"5\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"5\",\n                    \"securityName\": \"card monitor\",\n                    \"caInstrument\": \"Metrics\",\n                    \"effective\": \"2020-03-04T06:31:05\",\n                    \"expiryDate\": \"2020-03-04T15:21:22\",\n                    \"expectedReceiveDate\": \"2020-03-03T23:18:38\",\n                    \"payableDate\": \"2020-03-04T00:00:57\",\n                    \"region\": \"EMEA\",\n                    \"announceDate\": \"2020-03-04T11:27:13\",\n                    \"recordDate\": \"2020-03-03T23:32:47\",\n                    \"expirationDate\": \"2020-03-03T19:34:27\",\n                    \"updateDate\": \"2020-03-03T20:54:11\",\n                    \"eventClass\": \"2020-03-03T18:38:01\",\n                    \"eventCategory\": \"Wooden Specialist\",\n                    \"eventShortDescription\": \"Hat Corporate Arkansas\",\n                    \"eventOption\": \"Hat Greens\",\n                    \"eventElections\": \"Product matrix Health\",\n                    \"source\": \"Practical Wooden Pizza\",\n                    \"sourceStatus\": \"Personal Loan Account infomediaries\",\n                    \"sourceHistory\": \"solutions\",\n                    \"entityTypeCode\": \"clicks-and-mortar Refined Metal Salad Guadeloupe\",\n                    \"processingStatus\": \"deposit\",\n                    \"dividentRate\": \"89740\",\n                    \"localCcy\": \"Guatemala\",\n                    \"executionPriority\": \"32278\",\n                    \"primaryInstrument\": \"parsing Port\",\n                    \"primaryInstType\": \"Botswana Ergonomic Fresh Keyboard\",\n                    \"primaryInstCcy\": \"Ghana compress indigo\",\n                    \"preparationDate\": \"2020-03-04T17:51:17\",\n                    \"multiSourceMatchDate\": \"2020-03-04T16:49:24\",\n                    \"caEventRef\": \"Practical Rubber Tuna\",\n                    \"caMsgRef\": \"Tasty Fresh Ball\",\n                    \"restrictionCode\": \"Run\",\n                    \"taxibilityIndicator\": \"partnerships gold Alley\",\n                    \"marketDeadlineDate\": \"2020-03-04T02:26:02\",\n                    \"responseDeadlineDate\": \"2020-03-04T03:36:48\",\n                    \"entitlementDate\": \"2020-03-03T23:17:09\",\n                    \"partyId\": \"Bedfordshire invoice global\",\n                    \"internalAccountId\": \"Soap District Dynamic\",\n                    \"clientAccountId\": \"grow Soap Drive\",\n                    \"eagleId\": \"payment Borders Baby\",\n                    \"issueName\": \"Avon\",\n                    \"primaryAssetId\": \"Bypass array framework\",\n                    \"primaryAssetIdType\": \"Fiji\",\n                    \"longShortCode\": \"Missouri backing up\",\n                    \"quantity\": 57487,\n                    \"originalFace\": 72684\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"9\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"9\",\n                    \"securityName\": \"primary executive Table\",\n                    \"caInstrument\": \"payment Squares FTP\",\n                    \"effective\": \"2020-03-04T02:48:20\",\n                    \"expiryDate\": \"2020-03-04T11:41:19\",\n                    \"expectedReceiveDate\": \"2020-03-04T14:46:27\",\n                    \"payableDate\": \"2020-03-04T08:00:33\",\n                    \"region\": \"US\",\n                    \"announceDate\": \"2020-03-04T08:09:18\",\n                    \"recordDate\": \"2020-03-04T16:08:57\",\n                    \"expirationDate\": \"2020-03-03T18:55:17\",\n                    \"updateDate\": \"2020-03-04T03:37:48\",\n                    \"eventClass\": \"2020-03-04T12:06:28\",\n                    \"eventCategory\": \"Corners SDD\",\n                    \"eventShortDescription\": \"Orchestrator Auto Loan Account\",\n                    \"eventOption\": \"systems Rustic\",\n                    \"eventElections\": \"withdrawal\",\n                    \"source\": \"Borders vortals\",\n                    \"sourceStatus\": \"Developer cross-platform Ball\",\n                    \"sourceHistory\": \"New Israeli Sheqel Centers\",\n                    \"entityTypeCode\": \"Extended Ohio\",\n                    \"processingStatus\": \"Algeria\",\n                    \"dividentRate\": \"93306\",\n                    \"localCcy\": \"Generic USB\",\n                    \"executionPriority\": \"74284\",\n                    \"primaryInstrument\": \"Technician bi-directional\",\n                    \"primaryInstType\": \"system generating\",\n                    \"primaryInstCcy\": \"Senior Walk Assistant\",\n                    \"preparationDate\": \"2020-03-04T10:16:04\",\n                    \"multiSourceMatchDate\": \"2020-03-03T22:19:55\",\n                    \"caEventRef\": \"Factors brand\",\n                    \"caMsgRef\": \"European Monetary Unit (E.M.U.-6) digital\",\n                    \"restrictionCode\": \"Marketing Track\",\n                    \"taxibilityIndicator\": \"virtual Cambridgeshire\",\n                    \"marketDeadlineDate\": \"2020-03-04T14:27:23\",\n                    \"responseDeadlineDate\": \"2020-03-04T10:02:20\",\n                    \"entitlementDate\": \"2020-03-04T05:41:49\",\n                    \"partyId\": \"Savings Account yellow hard drive\",\n                    \"internalAccountId\": \"Mouse array\",\n                    \"clientAccountId\": \"Refined Wooden Bike\",\n                    \"eagleId\": \"Rupiah Officer Bermudian Dollar (customarily known as Bermuda Dollar)\",\n                    \"issueName\": \"Practical Cotton Tuna\",\n                    \"primaryAssetId\": \"Accounts Customer\",\n                    \"primaryAssetIdType\": \"1080p reinvent SDD\",\n                    \"longShortCode\": \"digital Assistant\",\n                    \"quantity\": 1947,\n                    \"originalFace\": 75251\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"3\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"3\",\n                    \"securityName\": \"Identity\",\n                    \"caInstrument\": \"models\",\n                    \"effective\": \"2020-03-04T18:10:08\",\n                    \"expiryDate\": \"2020-03-04T10:57:25\",\n                    \"expectedReceiveDate\": \"2020-03-03T19:16:21\",\n                    \"payableDate\": \"2020-03-04T00:05:35\",\n                    \"region\": \"US\",\n                    \"announceDate\": \"2020-03-04T15:45:53\",\n                    \"recordDate\": \"2020-03-03T23:26:23\",\n                    \"expirationDate\": \"2020-03-03T22:31:00\",\n                    \"updateDate\": \"2020-03-03T22:38:58\",\n                    \"eventClass\": \"2020-03-04T05:58:50\",\n                    \"eventCategory\": \"distributed firewall\",\n                    \"eventShortDescription\": \"Credit Card Account online\",\n                    \"eventOption\": \"payment copying markets\",\n                    \"eventElections\": \"white Car ROI\",\n                    \"source\": \"PNG Metal\",\n                    \"sourceStatus\": \"Berkshire\",\n                    \"sourceHistory\": \"cohesive ivory quantify\",\n                    \"entityTypeCode\": \"Right-sized Keys transition\",\n                    \"processingStatus\": \"bypassing Malagasy Ariary\",\n                    \"dividentRate\": \"52764\",\n                    \"localCcy\": \"Steel Salad\",\n                    \"executionPriority\": \"2333\",\n                    \"primaryInstrument\": \"Orchestrator website\",\n                    \"primaryInstType\": \"Agent\",\n                    \"primaryInstCcy\": \"Mexico Sleek Metal Fish optimize\",\n                    \"preparationDate\": \"2020-03-03T21:43:40\",\n                    \"multiSourceMatchDate\": \"2020-03-04T06:56:54\",\n                    \"caEventRef\": \"Gorgeous Maryland Regional\",\n                    \"caMsgRef\": \"transmitter connecting Home Loan Account\",\n                    \"restrictionCode\": \"capacitor\",\n                    \"taxibilityIndicator\": \"Kwanza deposit Cheese\",\n                    \"marketDeadlineDate\": \"2020-03-04T03:29:46\",\n                    \"responseDeadlineDate\": \"2020-03-04T00:52:35\",\n                    \"entitlementDate\": \"2020-03-04T09:22:46\",\n                    \"partyId\": \"panel Bedfordshire Strategist\",\n                    \"internalAccountId\": \"Lead Generic Granite Sausages District\",\n                    \"clientAccountId\": \"Sierra Leone International Persevering\",\n                    \"eagleId\": \"connecting withdrawal\",\n                    \"issueName\": \"online aggregate Auto Loan Account\",\n                    \"primaryAssetId\": \"customer loyalty Courts Ergonomic\",\n                    \"primaryAssetIdType\": \"radical Metal\",\n                    \"longShortCode\": \"RAM\",\n                    \"quantity\": 93651,\n                    \"originalFace\": 31741\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"4\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"4\",\n                    \"securityName\": \"Saint Barthelemy feed\",\n                    \"caInstrument\": \"white Handcrafted web services\",\n                    \"effective\": \"2020-03-03T21:59:33\",\n                    \"expiryDate\": \"2020-03-03T21:43:45\",\n                    \"expectedReceiveDate\": \"2020-03-03T23:31:17\",\n                    \"payableDate\": \"2020-03-03T21:09:34\",\n                    \"region\": \"APAC\",\n                    \"announceDate\": \"2020-03-03T19:02:51\",\n                    \"recordDate\": \"2020-03-03T23:15:27\",\n                    \"expirationDate\": \"2020-03-04T00:22:23\",\n                    \"updateDate\": \"2020-03-04T11:07:09\",\n                    \"eventClass\": \"2020-03-04T01:10:29\",\n                    \"eventCategory\": \"transmit\",\n                    \"eventShortDescription\": \"Open-source\",\n                    \"eventOption\": \"Multi-channelled Investment Account microchip\",\n                    \"eventElections\": \"vortals\",\n                    \"source\": \"Money Market Account\",\n                    \"sourceStatus\": \"FTP Auto Loan Account Handmade Soft Gloves\",\n                    \"sourceHistory\": \"Health Libyan Arab Jamahiriya\",\n                    \"entityTypeCode\": \"Handcrafted Frozen Bike\",\n                    \"processingStatus\": \"Fundamental Public-key\",\n                    \"dividentRate\": \"30474\",\n                    \"localCcy\": \"Plastic Rustic Soft Towels\",\n                    \"executionPriority\": \"64704\",\n                    \"primaryInstrument\": \"Djibouti Franc gold\",\n                    \"primaryInstType\": \"Wooden Steel Response\",\n                    \"primaryInstCcy\": \"implementation\",\n                    \"preparationDate\": \"2020-03-04T05:13:10\",\n                    \"multiSourceMatchDate\": \"2020-03-04T16:08:16\",\n                    \"caEventRef\": \"Aruba Assistant mobile\",\n                    \"caMsgRef\": \"Interactions invoice\",\n                    \"restrictionCode\": \"auxiliary\",\n                    \"taxibilityIndicator\": \"zero administration Beauty\",\n                    \"marketDeadlineDate\": \"2020-03-04T12:12:37\",\n                    \"responseDeadlineDate\": \"2020-03-04T05:53:31\",\n                    \"entitlementDate\": \"2020-03-03T19:39:40\",\n                    \"partyId\": \"functionalities reboot Oregon\",\n                    \"internalAccountId\": \"motivating standardization Assurance\",\n                    \"clientAccountId\": \"Mills\",\n                    \"eagleId\": \"Licensed SMTP teal\",\n                    \"issueName\": \"Credit Card Account programming\",\n                    \"primaryAssetId\": \"Customer\",\n                    \"primaryAssetIdType\": \"HTTP\",\n                    \"longShortCode\": \"Som\",\n                    \"quantity\": 41042,\n                    \"originalFace\": 91315\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"8\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"8\",\n                    \"securityName\": \"Rhode Island\",\n                    \"caInstrument\": \"Valley non-volatile\",\n                    \"effective\": \"2020-03-04T15:22:33\",\n                    \"expiryDate\": \"2020-03-04T12:00:07\",\n                    \"expectedReceiveDate\": \"2020-03-04T16:12:21\",\n                    \"payableDate\": \"2020-03-04T09:00:57\",\n                    \"region\": \"APAC\",\n                    \"announceDate\": \"2020-03-04T06:18:48\",\n                    \"recordDate\": \"2020-03-04T03:50:15\",\n                    \"expirationDate\": \"2020-03-04T10:36:14\",\n                    \"updateDate\": \"2020-03-04T12:59:25\",\n                    \"eventClass\": \"2020-03-04T13:55:02\",\n                    \"eventCategory\": \"Chilean Peso Unidades de fomento circuit connecting\",\n                    \"eventShortDescription\": \"Massachusetts silver\",\n                    \"eventOption\": \"THX\",\n                    \"eventElections\": \"Centers 24/365\",\n                    \"source\": \"Cotton red Sports\",\n                    \"sourceStatus\": \"Overpass\",\n                    \"sourceHistory\": \"recontextualize Electronics\",\n                    \"entityTypeCode\": \"Jersey wireless extend\",\n                    \"processingStatus\": \"multimedia ivory Small\",\n                    \"dividentRate\": \"74234\",\n                    \"localCcy\": \"Rubber\",\n                    \"executionPriority\": \"37291\",\n                    \"primaryInstrument\": \"withdrawal Credit Card Account\",\n                    \"primaryInstType\": \"web-enabled Supervisor\",\n                    \"primaryInstCcy\": \"THX\",\n                    \"preparationDate\": \"2020-03-04T18:08:19\",\n                    \"multiSourceMatchDate\": \"2020-03-04T13:10:50\",\n                    \"caEventRef\": \"Refined Soft Car payment\",\n                    \"caMsgRef\": \"Bridge Mobility\",\n                    \"restrictionCode\": \"Jewelery Intelligent\",\n                    \"taxibilityIndicator\": \"copying Baby\",\n                    \"marketDeadlineDate\": \"2020-03-04T02:57:29\",\n                    \"responseDeadlineDate\": \"2020-03-03T21:13:37\",\n                    \"entitlementDate\": \"2020-03-03T18:35:51\",\n                    \"partyId\": \"clicks-and-mortar\",\n                    \"internalAccountId\": \"cyan Rhode Island\",\n                    \"clientAccountId\": \"maroon Borders pixel\",\n                    \"eagleId\": \"plug-and-play end-to-end\",\n                    \"issueName\": \"Licensed Oman scalable\",\n                    \"primaryAssetId\": \"cyan\",\n                    \"primaryAssetIdType\": \"Home\",\n                    \"longShortCode\": \"Chair ivory Garden\",\n                    \"quantity\": 33199,\n                    \"originalFace\": 49891\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"7\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"7\",\n                    \"securityName\": \"6th generation morph Pizza\",\n                    \"caInstrument\": \"Coordinator Intelligent Cotton Gloves Computer\",\n                    \"effective\": \"2020-03-04T09:12:01\",\n                    \"expiryDate\": \"2020-03-03T23:27:13\",\n                    \"expectedReceiveDate\": \"2020-03-04T18:06:38\",\n                    \"payableDate\": \"2020-03-04T13:44:53\",\n                    \"region\": \"US\",\n                    \"announceDate\": \"2020-03-04T13:37:33\",\n                    \"recordDate\": \"2020-03-04T17:22:20\",\n                    \"expirationDate\": \"2020-03-04T04:43:52\",\n                    \"updateDate\": \"2020-03-04T13:41:48\",\n                    \"eventClass\": \"2020-03-03T18:34:05\",\n                    \"eventCategory\": \"migration\",\n                    \"eventShortDescription\": \"hub Metal\",\n                    \"eventOption\": \"full-range\",\n                    \"eventElections\": \"Fresh deposit\",\n                    \"source\": \"Ways parse\",\n                    \"sourceStatus\": \"front-end\",\n                    \"sourceHistory\": \"Forint Cameroon\",\n                    \"entityTypeCode\": \"Lithuania intangible\",\n                    \"processingStatus\": \"monitoring West Virginia\",\n                    \"dividentRate\": \"53253\",\n                    \"localCcy\": \"Innovative parsing Front-line\",\n                    \"executionPriority\": \"91813\",\n                    \"primaryInstrument\": \"foreground Assistant primary\",\n                    \"primaryInstType\": \"Plastic calculate\",\n                    \"primaryInstCcy\": \"Small Soft Gloves Plains\",\n                    \"preparationDate\": \"2020-03-04T12:25:58\",\n                    \"multiSourceMatchDate\": \"2020-03-04T08:22:27\",\n                    \"caEventRef\": \"transmitting Shirt Liaison\",\n                    \"caMsgRef\": \"Bosnia and Herzegovina transmitting\",\n                    \"restrictionCode\": \"frictionless\",\n                    \"taxibilityIndicator\": \"Intelligent Wooden Ball Port\",\n                    \"marketDeadlineDate\": \"2020-03-03T19:17:25\",\n                    \"responseDeadlineDate\": \"2020-03-04T01:11:25\",\n                    \"entitlementDate\": \"2020-03-04T01:43:15\",\n                    \"partyId\": \"neural TCP\",\n                    \"internalAccountId\": \"Industrial context-sensitive\",\n                    \"clientAccountId\": \"Multi-layered Expanded\",\n                    \"eagleId\": \"transform USB Fish\",\n                    \"issueName\": \"Computer Heights Granite\",\n                    \"primaryAssetId\": \"sky blue Virtual markets\",\n                    \"primaryAssetIdType\": \"deposit deposit\",\n                    \"longShortCode\": \"National Bedfordshire Fiji\",\n                    \"quantity\": 53048,\n                    \"originalFace\": 70293\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"10\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"10\",\n                    \"securityName\": \"Licensed Cotton Sausages workforce open-source\",\n                    \"caInstrument\": \"circuit models\",\n                    \"effective\": \"2020-03-04T07:50:04\",\n                    \"expiryDate\": \"2020-03-03T19:39:41\",\n                    \"expectedReceiveDate\": \"2020-03-04T01:04:11\",\n                    \"payableDate\": \"2020-03-04T11:30:59\",\n                    \"region\": \"EMEA\",\n                    \"announceDate\": \"2020-03-03T21:36:14\",\n                    \"recordDate\": \"2020-03-04T13:33:35\",\n                    \"expirationDate\": \"2020-03-04T17:13:27\",\n                    \"updateDate\": \"2020-03-04T08:44:41\",\n                    \"eventClass\": \"2020-03-04T07:16:24\",\n                    \"eventCategory\": \"alarm\",\n                    \"eventShortDescription\": \"Berkshire generate full-range\",\n                    \"eventOption\": \"Home Loan Account\",\n                    \"eventElections\": \"withdrawal\",\n                    \"source\": \"schemas Small Gorgeous Metal Pizza\",\n                    \"sourceStatus\": \"Sports Vermont Computers\",\n                    \"sourceHistory\": \"exploit Incredible Plastic Hat Colorado\",\n                    \"entityTypeCode\": \"Practical\",\n                    \"processingStatus\": \"Austria Consultant brand\",\n                    \"dividentRate\": \"10115\",\n                    \"localCcy\": \"Tennessee\",\n                    \"executionPriority\": \"83444\",\n                    \"primaryInstrument\": \"Research\",\n                    \"primaryInstType\": \"Chair\",\n                    \"primaryInstCcy\": \"turquoise\",\n                    \"preparationDate\": \"2020-03-04T03:08:56\",\n                    \"multiSourceMatchDate\": \"2020-03-04T09:40:57\",\n                    \"caEventRef\": \"TCP\",\n                    \"caMsgRef\": \"Grocery\",\n                    \"restrictionCode\": \"mobile Ergonomic\",\n                    \"taxibilityIndicator\": \"copying Communications\",\n                    \"marketDeadlineDate\": \"2020-03-04T09:12:13\",\n                    \"responseDeadlineDate\": \"2020-03-04T02:27:57\",\n                    \"entitlementDate\": \"2020-03-04T04:49:50\",\n                    \"partyId\": \"Kenyan Shilling 1080p\",\n                    \"internalAccountId\": \"Vista HDD\",\n                    \"clientAccountId\": \"wireless\",\n                    \"eagleId\": \"Baby Illinois\",\n                    \"issueName\": \"Car\",\n                    \"primaryAssetId\": \"Illinois Automotive\",\n                    \"primaryAssetIdType\": \"1080p lime\",\n                    \"longShortCode\": \"Profound\",\n                    \"quantity\": 51782,\n                    \"originalFace\": 13708\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"2\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"2\",\n                    \"securityName\": \"Industrial National\",\n                    \"caInstrument\": \"policy\",\n                    \"effective\": \"2020-03-03T20:47:52\",\n                    \"expiryDate\": \"2020-03-04T04:02:12\",\n                    \"expectedReceiveDate\": \"2020-03-04T12:03:11\",\n                    \"payableDate\": \"2020-03-04T04:17:07\",\n                    \"region\": \"EMEA\",\n                    \"announceDate\": \"2020-03-04T13:39:09\",\n                    \"recordDate\": \"2020-03-04T08:01:53\",\n                    \"expirationDate\": \"2020-03-04T04:53:52\",\n                    \"updateDate\": \"2020-03-04T14:36:02\",\n                    \"eventClass\": \"2020-03-04T07:42:07\",\n                    \"eventCategory\": \"Buckinghamshire artificial intelligence Product\",\n                    \"eventShortDescription\": \"Bangladesh Table Producer\",\n                    \"eventOption\": \"red\",\n                    \"eventElections\": \"Pennsylvania holistic\",\n                    \"source\": \"Mouse Minnesota\",\n                    \"sourceStatus\": \"dot-com\",\n                    \"sourceHistory\": \"Health\",\n                    \"entityTypeCode\": \"Concrete Berkshire\",\n                    \"processingStatus\": \"synthesizing\",\n                    \"dividentRate\": \"59253\",\n                    \"localCcy\": \"Practical Cotton Keyboard orange\",\n                    \"executionPriority\": \"17989\",\n                    \"primaryInstrument\": \"Gloves Legacy\",\n                    \"primaryInstType\": \"e-services\",\n                    \"primaryInstCcy\": \"digital Solomon Islands Dollar parse\",\n                    \"preparationDate\": \"2020-03-04T12:00:35\",\n                    \"multiSourceMatchDate\": \"2020-03-04T07:03:12\",\n                    \"caEventRef\": \"bus\",\n                    \"caMsgRef\": \"Plastic Home Loan Account\",\n                    \"restrictionCode\": \"backing up Georgia capacitor\",\n                    \"taxibilityIndicator\": \"clear-thinking Incredible Wooden Bike\",\n                    \"marketDeadlineDate\": \"2020-03-04T15:03:41\",\n                    \"responseDeadlineDate\": \"2020-03-03T20:26:47\",\n                    \"entitlementDate\": \"2020-03-04T11:46:19\",\n                    \"partyId\": \"blue\",\n                    \"internalAccountId\": \"California Analyst throughput\",\n                    \"clientAccountId\": \"invoice\",\n                    \"eagleId\": \"grow Sleek Granite Hat\",\n                    \"issueName\": \"Refined\",\n                    \"primaryAssetId\": \"frictionless Forint\",\n                    \"primaryAssetIdType\": \"empowering Cotton action-items\",\n                    \"longShortCode\": \"invoice optimal\",\n                    \"quantity\": 24591,\n                    \"originalFace\": 87036\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"6\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"6\",\n                    \"securityName\": \"granular\",\n                    \"caInstrument\": \"Cloned Berkshire Infrastructure\",\n                    \"effective\": \"2020-03-04T03:10:04\",\n                    \"expiryDate\": \"2020-03-04T17:16:17\",\n                    \"expectedReceiveDate\": \"2020-03-04T13:31:17\",\n                    \"payableDate\": \"2020-03-04T03:22:03\",\n                    \"region\": \"APAC\",\n                    \"announceDate\": \"2020-03-04T01:43:39\",\n                    \"recordDate\": \"2020-03-04T08:32:27\",\n                    \"expirationDate\": \"2020-03-04T00:00:19\",\n                    \"updateDate\": \"2020-03-04T10:10:05\",\n                    \"eventClass\": \"2020-03-04T10:07:32\",\n                    \"eventCategory\": \"Awesome Representative\",\n                    \"eventShortDescription\": \"azure Baby Assistant\",\n                    \"eventOption\": \"Monaco Supervisor engineer\",\n                    \"eventElections\": \"program withdrawal\",\n                    \"source\": \"array Personal Loan Account Avon\",\n                    \"sourceStatus\": \"primary haptic Squares\",\n                    \"sourceHistory\": \"application Ergonomic Rubber Sausages\",\n                    \"entityTypeCode\": \"Concrete maroon drive\",\n                    \"processingStatus\": \"fuchsia program integrate\",\n                    \"dividentRate\": \"55040\",\n                    \"localCcy\": \"back-end Bedfordshire\",\n                    \"executionPriority\": \"58154\",\n                    \"primaryInstrument\": \"Licensed Plastic Cheese\",\n                    \"primaryInstType\": \"withdrawal\",\n                    \"primaryInstCcy\": \"Court e-tailers California\",\n                    \"preparationDate\": \"2020-03-04T09:55:04\",\n                    \"multiSourceMatchDate\": \"2020-03-04T14:00:18\",\n                    \"caEventRef\": \"fault-tolerant vertical\",\n                    \"caMsgRef\": \"Branding Chips Sudan\",\n                    \"restrictionCode\": \"Refined Concrete Towels Tajikistan Investment Account\",\n                    \"taxibilityIndicator\": \"Soft Plastic Rial Omani\",\n                    \"marketDeadlineDate\": \"2020-03-04T02:27:38\",\n                    \"responseDeadlineDate\": \"2020-03-04T05:21:52\",\n                    \"entitlementDate\": \"2020-03-04T10:58:40\",\n                    \"partyId\": \"Michigan XSS\",\n                    \"internalAccountId\": \"gold deposit\",\n                    \"clientAccountId\": \"orchestration Regional auxiliary\",\n                    \"eagleId\": \"Focused\",\n                    \"issueName\": \"Berkshire Industrial pixel\",\n                    \"primaryAssetId\": \"override cross-platform\",\n                    \"primaryAssetIdType\": \"hacking Auto Loan Account\",\n                    \"longShortCode\": \"back up architectures generate\",\n                    \"quantity\": 39277,\n                    \"originalFace\": 76693\n                }\n            },\n            {\n                \"_index\": \"ca_event\",\n                \"_type\": \"caevent\",\n                \"_id\": \"1\",\n                \"_score\": 1,\n                \"_source\": {\n                    \"id\": \"1\",\n                    \"securityName\": \"Savings Account\",\n                    \"caInstrument\": \"bandwidth-monitored optical Tools\",\n                    \"effective\": \"2020-03-04T13:11:46\",\n                    \"expiryDate\": \"2020-03-04T15:35:47\",\n                    \"expectedReceiveDate\": \"2020-03-04T02:49:25\",\n                    \"payableDate\": \"2020-03-04T03:39:18\",\n                    \"region\": \"US\",\n                    \"announceDate\": \"2020-03-04T04:14:42\",\n                    \"recordDate\": \"2020-03-03T19:36:59\",\n                    \"expirationDate\": \"2020-03-03T22:38:52\",\n                    \"updateDate\": \"2020-03-04T17:42:36\",\n                    \"eventClass\": \"2020-03-04T09:22:57\",\n                    \"eventCategory\": \"optimize\",\n                    \"eventShortDescription\": \"integrated Lock\",\n                    \"eventOption\": \"initiatives turquoise Multi-lateral\",\n                    \"eventElections\": \"wireless connecting Electronics\",\n                    \"source\": \"Functionality XSS bluetooth\",\n                    \"sourceStatus\": \"Officer Frozen\",\n                    \"sourceHistory\": \"Tanzanian Shilling Avon\",\n                    \"entityTypeCode\": \"mint green Avon\",\n                    \"processingStatus\": \"Pennsylvania navigate\",\n                    \"dividentRate\": \"84501\",\n                    \"localCcy\": \"invoice orchid Trace\",\n                    \"executionPriority\": \"41765\",\n                    \"primaryInstrument\": \"Avon Fresh disintermediate\",\n                    \"primaryInstType\": \"Berkshire granular Strategist\",\n                    \"primaryInstCcy\": \"Practical\",\n                    \"preparationDate\": \"2020-03-04T11:03:25\",\n                    \"multiSourceMatchDate\": \"2020-03-04T07:57:55\",\n                    \"caEventRef\": \"4th generation\",\n                    \"caMsgRef\": \"SCSI\",\n                    \"restrictionCode\": \"Profound\",\n                    \"taxibilityIndicator\": \"compressing\",\n                    \"marketDeadlineDate\": \"2020-03-04T18:04:27\",\n                    \"responseDeadlineDate\": \"2020-03-04T06:50:17\",\n                    \"entitlementDate\": \"2020-03-03T20:05:16\",\n                    \"partyId\": \"transition\",\n                    \"internalAccountId\": \"synthesize white synergies\",\n                    \"clientAccountId\": \"Handcrafted Unbranded Cotton Chicken front-end\",\n                    \"eagleId\": \"Car\",\n                    \"issueName\": \"deposit Brunei Darussalam\",\n                    \"primaryAssetId\": \"Fantastic Soft Ball\",\n                    \"primaryAssetIdType\": \"Zambian Kwacha\",\n                    \"longShortCode\": \"Streamlined Liechtenstein\",\n                    \"quantity\": 19973,\n                    \"originalFace\": 91134\n                }\n            }\n        ]\n    },\n    \"aggregations\": {\n        \"regions\": {\n            \"doc_count_error_upper_bound\": 0,\n            \"sum_other_doc_count\": 0,\n            \"buckets\": [\n                {\n                    \"key\": \"US\",\n                    \"doc_count\": 4,\n                    \"dayByDay\": {\n                        \"buckets\": [\n                            {\n                                \"key_as_string\": \"2020-03-03T00:00:00.000Z\",\n                                \"key\": 1583193600000,\n                                \"doc_count\": 3\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-04T00:00:00.000Z\",\n                                \"key\": 1583280000000,\n                                \"doc_count\": 1\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-05T00:00:00.000Z\",\n                                \"key\": 1583366400000,\n                                \"doc_count\": 0\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-06T00:00:00.000Z\",\n                                \"key\": 1583452800000,\n                                \"doc_count\": 0\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"key\": \"APAC\",\n                    \"doc_count\": 3,\n                    \"dayByDay\": {\n                        \"buckets\": [\n                            {\n                                \"key_as_string\": \"2020-03-03T00:00:00.000Z\",\n                                \"key\": 1583193600000,\n                                \"doc_count\": 0\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-04T00:00:00.000Z\",\n                                \"key\": 1583280000000,\n                                \"doc_count\": 3\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-05T00:00:00.000Z\",\n                                \"key\": 1583366400000,\n                                \"doc_count\": 0\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-06T00:00:00.000Z\",\n                                \"key\": 1583452800000,\n                                \"doc_count\": 0\n                            }\n                        ]\n                    }\n                },\n                {\n                    \"key\": \"EMEA\",\n                    \"doc_count\": 3,\n                    \"dayByDay\": {\n                        \"buckets\": [\n                            {\n                                \"key_as_string\": \"2020-03-03T00:00:00.000Z\",\n                                \"key\": 1583193600000,\n                                \"doc_count\": 1\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-04T00:00:00.000Z\",\n                                \"key\": 1583280000000,\n                                \"doc_count\": 2\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-05T00:00:00.000Z\",\n                                \"key\": 1583366400000,\n                                \"doc_count\": 0\n                            },\n                            {\n                                \"key_as_string\": \"2020-03-06T00:00:00.000Z\",\n                                \"key\": 1583452800000,\n                                \"doc_count\": 0\n                            }\n                        ]\n                    }\n                }\n            ]\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Events by Expiry Date Copy",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"query\" : {\r\n\r\n\t\t\t\t\t\"range\" : {\r\n\t\t\t\t\t\t\"expirationDate\" : {\r\n\t\t\t\t\t\t\t\"gt\" : \"2020-03-03T00:00:00.000Z\",\r\n\t\t\t\t\t\t\t\"lt\" : \"2020-03-06T00:00:00.000Z\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t},\r\n    \"aggs\" : {\r\n\t\t\"regions\" : {\r\n\t\t\t\"terms\" : {\r\n\t\t\t\t\"field\" : \"region\",\r\n\t\t\t\t\"min_doc_count\": 0\r\n\t\t\t},\r\n\t\t\"aggs\" : {\r\n\t\t\t\"dayByDay\" : {\r\n\t    \t\t\"date_histogram\" : {\r\n\t        \t\t\"field\" : \"expirationDate\",\r\n\t        \t\t\"interval\" : \"day\",\r\n\t        \t\t\"min_doc_count\": 0,\r\n\t        \t\t\"extended_bounds\" : {\r\n\t        \t\t\t\"min\" : 1583193600000,\r\n\t        \t\t\t\"max\" : 1583452800000\r\n\t        \t\t}\r\n\t    \t\t}\r\n\t\t\t}\r\n\t\t}\r\n\t\t}\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "regions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"type\" : {\r\n            \"value\" : \"region\"\r\n        }\r\n    }\r\n}"
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete caevent",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:9200/ca_event/",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"ca_event",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete by query",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"match_all\": {}\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/ca_event/_delete_by_query",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"ca_event",
+						"_delete_by_query"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Events by Expiry Date nested",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"query\" : {\r\n\r\n\t\t\t\t\t\"range\" : {\r\n\t\t\t\t\t\t\"expirationDate\" : {\r\n\t\t\t\t\t\t\t\"gt\" : \"2020-03-03T00:00:00.000Z\",\r\n\t\t\t\t\t\t\t\"lt\" : \"2020-03-04T00:00:00.000Z\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Events by date and by region",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"query\" : {\r\n\r\n\t\t\t\t\t\"range\" : {\r\n\t\t\t\t\t\t\"expirationDate\" : {\r\n\t\t\t\t\t\t\t\"gt\" : \"2020-03-03T00:00:00.000Z\",\r\n\t\t\t\t\t\t\t\"lt\" : \"2020-03-04T00:00:00.000Z\"\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\r\n\t}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "match_all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n        \"match_all\": {\r\n        \t\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9200/_search",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "force merge",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:9200/ca_event/_forcemerge?only_expunge_deletes=true",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"ca_event",
+						"_forcemerge"
+					],
+					"query": [
+						{
+							"key": "only_expunge_deletes",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -14,7 +14,6 @@ import pl.jacekduszenko.abstr.model.mongo.agg.MongoAggregation;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Optional.ofNullable;
 import static org.apache.commons.compress.utils.Lists.newArrayList;
 
 @Service
@@ -23,8 +22,6 @@ import static org.apache.commons.compress.utils.Lists.newArrayList;
 @SuppressWarnings("unchecked")
 public class MongoAggregationsObjectMapper {
     private final static int ONE = 1;
-    private final static String AGGREGATIONS_KEY_SHORT = "aggs";
-    private final static String AGGREGATIONS_KEY_LONG = "aggregations";
     private static final String MULTIPLE_AGGREGATIONS_UNSUPPORTED_MSG = "Multiple aggregations are currently unsupported";
     private static final String AGGREGATION_TYPE_NOT_FOUND = "Aggregation type not found";
 
