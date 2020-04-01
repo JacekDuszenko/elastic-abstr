@@ -31,7 +31,6 @@ public class MongoDataFeed implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         mongoTemplate.getCollection(COLLECTION_NAME).insertMany(loadDataFromCsv());
-        System.out.printf("lolz");
     }
 
     @SneakyThrows
