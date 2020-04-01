@@ -1,36 +1,62 @@
 package pl.jacekduszenko.abstr.integration.mongo;
 
-import io.vavr.collection.Stream;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
+import lombok.SneakyThrows;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-import pl.jacekduszenko.abstr.model.mongo.MongoMockData;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MongoDataFeed implements ApplicationRunner {
 
+    private final static String COLLECTION_NAME = "mongo_bnyabstr";
+    private final static String CSV_DATA_RESOURCE_NAME = "static/example_mongo_data.csv";
+    private final static String CSV_SEPARATOR = ";";
+    private final static long ONE_ELEMENT = 1L;
+
     private final MongoTemplate mongoTemplate;
 
     @Override
     public void run(ApplicationArguments args) {
-        createMockData(50).forEach((mongoTemplate::insert));
+        mongoTemplate.getCollection(COLLECTION_NAME).insertMany(loadDataFromCsv());
+        System.out.printf("lolz");
     }
 
-    private List<MongoMockData> createMockData(int quantity) {
-        return Stream.continually(MongoDataFeed::random).take(quantity).toJavaList();
+    @SneakyThrows
+    private List<Document> loadDataFromCsv() {
+        Path csvFilePath = Paths.get(getClass().getClassLoader().getResource(CSV_DATA_RESOURCE_NAME).toURI());
+        Supplier<Stream<String[]>> wordStreamSupplier = () -> getWordsStream(csvFilePath);
+        String[] keywords = wordStreamSupplier.get().findFirst().orElseGet(() -> new String[]{});
+
+        return wordStreamSupplier.get().skip(ONE_ELEMENT)
+                .map(array -> convertToDocument(keywords, array))
+                .collect(Collectors.toList());
     }
 
-    private static MongoMockData random() {
-        return new MongoMockData(RandomStringUtils.random(10, true, false),
-                RandomUtils.nextInt(20, 100),
-                RandomUtils.nextBoolean());
+    @SneakyThrows
+    private Stream<String[]> getWordsStream(Path csvFilePath) {
+        return Files.readAllLines(csvFilePath)
+                .stream()
+                .map(line -> line.split(CSV_SEPARATOR));
+    }
+
+    private Document convertToDocument(String[] keywords, String[] array) {
+        Document doc = new Document();
+        for (int i = 0; i < array.length; ++i) {
+            doc.put(keywords[i], array[i]);
+        }
+        return doc;
     }
 }

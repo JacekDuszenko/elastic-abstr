@@ -1,0 +1,32 @@
+{
+  "query": {
+    "range": {
+      "expirationDate": {
+        "gt": "2020-03-03T00:00:00.000Z",
+        "lt": "2020-03-06T00:00:00.000Z"
+      }
+    }
+  },
+  "aggs": {
+    "regions": {
+      "terms": {
+        "field": "region",
+        "min_doc_count": 0
+      },
+      "aggs": {
+        "dayByDay": {
+          "date_histogram": {
+            "field": "expirationDate",
+            "interval": "day",
+            "min_doc_count": 0,
+            "extended_bounds": {
+              "min": 1583193600000,
+              "max": 1583452800000
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
