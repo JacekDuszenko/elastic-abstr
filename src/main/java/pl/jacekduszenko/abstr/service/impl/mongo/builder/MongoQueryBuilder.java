@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import pl.jacekduszenko.abstr.service.impl.mongo.builder.interval.IntervalSupplier;
 
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static pl.jacekduszenko.abstr.integration.BooleanParser.parseBoolean;
 
@@ -56,8 +58,12 @@ public class MongoQueryBuilder {
                                 .onFailure(c -> parseFailureConsumer.accept(value))));
     }
 
-    //TODO sequenced processing instead of onX pipeline
     private void addTwoValueCriterionForInferedType(String valueFirst, String valueSecond, Consumer<Tuple2> criterionConsumer) {
+        List<Try> tries = List.of(
+                tryParseArgumentsToGivenType(, valueFirst, valueSecond)
+
+        );
+
         Try.of(() -> Tuple.of(Integer.parseInt(valueFirst), Integer.parseInt(valueSecond)))
                 .onSuccess(criterionConsumer)
                 .onFailure(e -> Try.of(() -> Tuple.of(Double.parseDouble(valueFirst), Double.parseDouble(valueSecond)))
@@ -65,6 +71,10 @@ public class MongoQueryBuilder {
                         .onFailure(x -> Try.of(() -> Tuple.of(parseBoolean(valueFirst), parseBoolean(valueSecond)))
                                 .onSuccess(criterionConsumer)
                                 .onFailure(c -> criterionConsumer.accept(Tuple.of(valueFirst, valueSecond)))));
+    }
+
+    private Try tryParseArgumentsToGivenType(Function<Tuple2<String, String>, Tuple2<Object, Object>> rangeArgumentParser, String leftRangeValue, String rightRangeValue) {
+        return Try.of(() -> rangeArgumentParser.apply(Tuple.of(leftRangeValue, rightRangeValue)));
     }
 
     public Query build() {
