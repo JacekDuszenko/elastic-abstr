@@ -6,6 +6,8 @@ import io.vavr.control.Try;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import pl.jacekduszenko.abstr.service.impl.mongo.builder.interval.IntervalSupplier;
+import pl.jacekduszenko.abstr.service.impl.mongo.types.MongoRangeDateParser;
+import pl.jacekduszenko.abstr.service.impl.mongo.types.MongoRangeParser;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -60,7 +62,7 @@ public class MongoQueryBuilder {
 
     private void addTwoValueCriterionForInferedType(String valueFirst, String valueSecond, Consumer<Tuple2> criterionConsumer) {
         List<Try> tries = List.of(
-                tryParseArgumentsToGivenType(, valueFirst, valueSecond)
+                tryParseArgumentsToGivenType(new MongoRangeDateParser(), valueFirst, valueSecond)
 
         );
 
@@ -73,8 +75,8 @@ public class MongoQueryBuilder {
                                 .onFailure(c -> criterionConsumer.accept(Tuple.of(valueFirst, valueSecond)))));
     }
 
-    private Try tryParseArgumentsToGivenType(Function<Tuple2<String, String>, Tuple2<Object, Object>> rangeArgumentParser, String leftRangeValue, String rightRangeValue) {
-        return Try.of(() -> rangeArgumentParser.apply(Tuple.of(leftRangeValue, rightRangeValue)));
+    private Try tryParseArgumentsToGivenType(MongoRangeParser mognoArgumentParser, String leftRangeValue, String rightRangeValue) {
+        return Try.of(() -> mognoArgumentParser.apply(Tuple.of(leftRangeValue, rightRangeValue)));
     }
 
     public Query build() {
