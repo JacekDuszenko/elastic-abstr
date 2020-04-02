@@ -81,7 +81,6 @@ public class LuceneToMongoTranslatorTest {
         assertThat(range.get("$lte"), is(30000));
     }
 
-
     @Test
     public void shouldTranslateDateRangeQueryString() {
         //given
@@ -96,8 +95,7 @@ public class LuceneToMongoTranslatorTest {
         assertThat(result.size(), is(1));
         Document dateRange = (Document) result.get("expiration_date");
         assertThat(dateRange.get("$gt"), is(notNullValue()));
-        assertThat(dateRange.get("$lt"), is(notNullValue())); //TODO change
-
+        assertThat(dateRange.get("$lt"), is(notNullValue()));
     }
 
     @SneakyThrows

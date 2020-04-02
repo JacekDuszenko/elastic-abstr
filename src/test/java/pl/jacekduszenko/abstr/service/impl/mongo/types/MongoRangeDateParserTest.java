@@ -10,6 +10,8 @@ import java.util.Date;
 class MongoRangeDateParserTest {
 
     private MongoRangeDateParser mongoRangeDateParser;
+    public static final String validLeftDate = "2020-03-03t00:00:00.000z";
+    public static final String validRightDate = "2020-03-06t00:00:00.000z";
 
     @BeforeEach
     void setUp() {
@@ -18,11 +20,14 @@ class MongoRangeDateParserTest {
 
     @Test
     void shouldParseDateCorrectly() {
-
         //given
-        Tuple2 validDates = Tuple.of();
-        
+        Tuple2<String, String> validDates = Tuple.of(validLeftDate, validRightDate);
+
         //when
-        Tuple2<Date,Date> parsedDates = .apply()
+        Tuple2<Date, Date> parsedDates = mongoRangeDateParser.apply(validDates);
+
+        //then no exception thrown and assert later
+        System.out.println(parsedDates);
+
     }
 }
