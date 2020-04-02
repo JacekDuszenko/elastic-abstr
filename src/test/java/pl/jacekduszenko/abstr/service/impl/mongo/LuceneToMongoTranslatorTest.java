@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import pl.jacekduszenko.abstr.data.LuceneQueryProvider;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,10 @@ public class LuceneToMongoTranslatorTest {
     public static final String closedIntervalsRangeQueryString = "+balance:[20000 TO 30000]";
     public static final String openIntervalsRangeQueryString = "+balance:{20000 TO 30000}";
     public static final String leftOpenRightClosedIntervalQueryString = "+balance:{20000 TO 30000]";
-    public static final String dateRangeQueryString = "expirationDate:{2020-03-03T00:00:00.000Z TO 2020-03-06T00:00:00.000Z}";
+    public static final String dateRangeQueryString = "expiration_date:{2020-03-03T00:00:00.000Z TO 2020-03-06T00:00:00.000Z}";
+
+    public static final long validEpochTimeOfExpirationDateLeftInterval = 1583190000000L;
+    public static final long validEpochTimeOfExpirationDateRightInterval = 1583449200000L;
 
     private LuceneToMongoTranslator luceneToMongoTranslator;
 
@@ -96,6 +100,10 @@ public class LuceneToMongoTranslatorTest {
         Document dateRange = (Document) result.get("expiration_date");
         assertThat(dateRange.get("$gt"), is(notNullValue()));
         assertThat(dateRange.get("$lt"), is(notNullValue()));
+        Date greaterThanDate = (Date) dateRange.get("$gt");
+        Date lessThanDate = (Date) dateRange.get("$lt");
+        assertThat(greaterThanDate.getTime(), is(validEpochTimeOfExpirationDateLeftInterval));
+        assertThat(lessThanDate.getTime(), is(validEpochTimeOfExpirationDateRightInterval));
     }
 
     @SneakyThrows

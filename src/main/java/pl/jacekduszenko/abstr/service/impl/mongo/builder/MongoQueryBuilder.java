@@ -6,12 +6,10 @@ import io.vavr.control.Try;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import pl.jacekduszenko.abstr.service.impl.mongo.builder.interval.IntervalSupplier;
-import pl.jacekduszenko.abstr.service.impl.mongo.types.MongoRangeDateParser;
-import pl.jacekduszenko.abstr.service.impl.mongo.types.MongoRangeParser;
+import pl.jacekduszenko.abstr.service.impl.mongo.types.*;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static pl.jacekduszenko.abstr.integration.BooleanParser.parseBoolean;
 
@@ -61,22 +59,25 @@ public class MongoQueryBuilder {
     }
 
     private void addTwoValueCriterionForInferedType(String valueFirst, String valueSecond, Consumer<Tuple2> criterionConsumer) {
-        List<Try> tries = List.of(
-                tryParseArgumentsToGivenType(new MongoRangeDateParser(), valueFirst, valueSecond)
-
-        );
-
-        Try.of(() -> Tuple.of(Integer.parseInt(valueFirst), Integer.parseInt(valueSecond)))
-                .onSuccess(criterionConsumer)
-                .onFailure(e -> Try.of(() -> Tuple.of(Double.parseDouble(valueFirst), Double.parseDouble(valueSecond)))
-                        .onSuccess(criterionConsumer)
-                        .onFailure(x -> Try.of(() -> Tuple.of(parseBoolean(valueFirst), parseBoolean(valueSecond)))
-                                .onSuccess(criterionConsumer)
-                                .onFailure(c -> criterionConsumer.accept(Tuple.of(valueFirst, valueSecond)))));
+        getListOfParsers().stream()
+                .map(parser -> tryParseToType(parser, valueFirst, valueSecond))
+                .filter(Try::isSuccess)
+                .findFirst()
+                .ifPresent(successfulTypeInference -> criterionConsumer.accept(successfulTypeInference.get()));
     }
 
-    private Try tryParseArgumentsToGivenType(MongoRangeParser mognoArgumentParser, String leftRangeValue, String rightRangeValue) {
-        return Try.of(() -> mognoArgumentParser.apply(Tuple.of(leftRangeValue, rightRangeValue)));
+    private List<MongoRangeParser> getListOfParsers() {
+        return List.of(
+                new MongoRangeIntParser(),
+                new MongoRangeDoubleParser(),
+                new MongoRangeBooleanParser(),
+                new MongoRangeDateParser(),
+                new MongoRangeIdentityParser());
+    }
+
+    @SuppressWarnings("unchecked")
+    private Try<Tuple2> tryParseToType(MongoRangeParser parser, String leftRangeValue, String rightRangeValue) {
+        return Try.of(() -> (Tuple2) parser.apply(Tuple.of(leftRangeValue, rightRangeValue)));
     }
 
     public Query build() {
