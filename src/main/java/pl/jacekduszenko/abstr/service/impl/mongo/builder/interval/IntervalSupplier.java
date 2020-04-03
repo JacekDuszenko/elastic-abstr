@@ -8,6 +8,10 @@ import pl.jacekduszenko.abstr.service.impl.mongo.builder.MongoQueryBuilder;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Template method pattern implementation that delegates logic of building query
+ * depending on particular interval type to subclasses.
+ */
 @RequiredArgsConstructor
 public abstract class IntervalSupplier implements Supplier<Void> {
     protected final MongoQueryBuilder builder;
