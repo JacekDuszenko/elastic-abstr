@@ -27,13 +27,12 @@ public class SingleNestedAggregationStrategy implements MongoBucketAggregationSt
     public Bson composeAggregation(Map<String, Object> rawQuery) {
         Map<String, Object> topLevelAggregation = extractTopLevelAggregation(rawQuery);
         String groupByFieldName = getGroupByFieldName(topLevelAggregation);
-        BsonArray bsar = new BsonArray();
-        Aggregates.group(prependDollar(groupByFieldName));
         Document document = new Document();
         Map<String, Object> nestedAggregation = extractNestedAggregation(rawQuery);
-        System.out.println("XD");
         return null;
     }
+    //TODO single value being returned -> figure out a way to embed aggs list in mongo bson or convert to list computation context
+    // also the hardest part will be to figure out things with date histogram, possible enforced emulation of the query
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> extractTopLevelAggregation(Map<String, Object> rawQuery) throws TranslationException {
