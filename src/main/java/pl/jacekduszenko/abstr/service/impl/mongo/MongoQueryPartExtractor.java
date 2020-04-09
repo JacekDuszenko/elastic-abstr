@@ -21,8 +21,8 @@ import static io.vavr.Tuple.of;
 public class MongoQueryPartExtractor implements QueryPartExtractor<String, String> {
 
     private final static String QUERY_KEY = "query";
-    private final static String AGGREGATION_KEY = "aggs";
-    private static final String AGGREGATION_KEY_LONG = "aggregations";
+    public final static String AGGREGATION_KEY = "aggs";
+    public static final String AGGREGATION_KEY_LONG = "aggregations";
 
     private final ObjectMapper objectMapper;
 

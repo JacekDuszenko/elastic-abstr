@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MongoDataFeed implements ApplicationRunner {
 
-    private final static String COLLECTION_NAME = "mongo_bnyabstr";
+    public final static String COLLECTION_NAME = "mongo_bnyabstr";
     private final static String CSV_DATA_RESOURCE_NAME = "static/example_mongo_data.csv";
     private final static String CSV_SEPARATOR = ";";
     private final static long ONE_ELEMENT = 1L;
@@ -39,9 +39,9 @@ public class MongoDataFeed implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         mongoTemplate.getCollection(COLLECTION_NAME).insertMany(loadDataFromCsv());
 
-        Iterable<Document> queryResult = executeQuery(List.of(Aggregates.group("$region", Accumulators.push("buckets","$$ROOT"))));
-
-        System.out.println(queryResult);
+        Iterable<Document> queryResult = executeQuery(List.of(Aggregates.group("$region",List.of(Accumulators.push("buckets", "$$ROOT"))),
+                                                            Aggregates.bucketAuto("$buckets.expiry_date", 3)
+        ));
     }
 
     private List<Document> executeQuery(List<? extends Bson> aggregations) {

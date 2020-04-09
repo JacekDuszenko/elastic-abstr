@@ -4,6 +4,7 @@ import lombok.Getter;
 import pl.jacekduszenko.abstr.model.mongo.agg.MongoAggregation;
 import pl.jacekduszenko.abstr.model.mongo.agg.bucket.MongoTermBucketAggregation;
 import pl.jacekduszenko.abstr.model.mongo.agg.bucket.strategy.impl.SingleNestedAggregationStrategy;
+import pl.jacekduszenko.abstr.model.mongo.agg.bucket.strategy.impl.ZeroNestedAggregationStrategy;
 
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,8 @@ public enum MongoAggregations {
         @Override
         public MongoAggregation newInstance(Map<String, Object> dataChunk) {
             return new MongoTermBucketAggregation(dataChunk, List.of(
-                    new SingleNestedAggregationStrategy()
+                    new SingleNestedAggregationStrategy(),
+                    new ZeroNestedAggregationStrategy()
             ));
         }
     };

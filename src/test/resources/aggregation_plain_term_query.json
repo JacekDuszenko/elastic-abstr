@@ -1,0 +1,11 @@
+{
+  "aggs": {
+    "regions": {
+      "terms": {
+        "field": "region",
+        "min_doc_count": 0
+      }
+    }
+  }
+}
+

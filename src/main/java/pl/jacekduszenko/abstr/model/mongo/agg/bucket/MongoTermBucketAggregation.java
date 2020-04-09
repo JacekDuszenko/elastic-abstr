@@ -9,6 +9,7 @@ import pl.jacekduszenko.abstr.model.mongo.agg.bucket.strategy.impl.MongoBucketAg
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -27,9 +28,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class MongoTermBucketAggregation extends BaseMongoBucketAggregation {
-
     private final static String AGGREGATION_SHORT_KEY = "aggs";
     private final static String AGGREGATION_FULL_KEY = "aggregations";
+    private final static String NO_STRATEGY_FOUND_ERROR_MESSAGE = "Could not find suitable aggregation strategy for term aggregation";
 
     private final List<MongoBucketAggregationStrategy> aggregationStrats;
 
@@ -47,19 +48,26 @@ public class MongoTermBucketAggregation extends BaseMongoBucketAggregation {
                 return strat.composeAggregation(this.getRawDataChunk());
             }
         }
-        throw new TranslationException("Could not find suitable aggregation strategy for term aggregation");
+        throw new TranslationException(NO_STRATEGY_FOUND_ERROR_MESSAGE);
     }
 
     private int countNestedAggregations(Map<String, Object> rawDataChunk) {
-        AtomicInteger count = new AtomicInteger();
+        AtomicInteger numberOfAggs = new AtomicInteger(0);
         JSONObject queryChunkFromMap = new JSONObject(rawDataChunk);
-        queryChunkFromMap
-                .keySet()
-                .stream()
-                .filter(this::isAggregation)
-                .peek(key -> count.incrementAndGet())
-                .forEach(key -> count.set(count.get() + countNestedAggregations((JSONObject) queryChunkFromMap.get(key))));
-        return count.get();
+        Set<String> keySet = queryChunkFromMap.keySet();
+        int aggsInCurrentNode = (int) keySet.stream().filter(this::isAggregation).count();
+        keySet.stream()
+                .filter(key -> isFieldAnObject(queryChunkFromMap, key))
+                .forEach(key -> recursivelyCallCountAggregations(numberOfAggs, queryChunkFromMap, key));
+        return aggsInCurrentNode + numberOfAggs.get();
+    }
+
+    private void recursivelyCallCountAggregations(AtomicInteger numberOfAggs, JSONObject queryChunkFromMap, String key) {
+        numberOfAggs.set(numberOfAggs.get() + countNestedAggregations((JSONObject) queryChunkFromMap.get(key)));
+    }
+
+    private boolean isFieldAnObject(JSONObject queryChunkFromMap, String key) {
+        return queryChunkFromMap.get(key).getClass().equals(JSONObject.class);
     }
 
     private boolean isAggregation(String key) {

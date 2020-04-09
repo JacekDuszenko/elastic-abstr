@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest(classes = AbstrApplication.class)
 @AutoConfigureMockMvc
-public class MongoQueryIntegrationTest {
+public class MongoSimpleAggregationsIntegrationTest {
 
     private final ElasticQueryStringBuilder builder = new ElasticQueryStringBuilder();
     private final String mockMongoData = "mockMongoData";
