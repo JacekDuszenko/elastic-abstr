@@ -27,7 +27,7 @@ public class MongoAggregationsObjectMapper {
 
     private final ObjectMapper objectMapper;
 
-    private final MongoAggregationsFactory mongoAggregationsFactory;
+    private final MongoAggregationModelFactory mongoAggregationModelFactory;
 
     List<MongoAggregation> mapQueryStringToAggregations(String queryString) {
         return Try.of(queryToAggregations(queryString))
@@ -47,7 +47,7 @@ public class MongoAggregationsObjectMapper {
         Map<String, Object> aggregation = getAggregationDataChunk(aggregationChunk);
         String aggregationKeyword = extractSingleKey(aggregation, AGGREGATION_TYPE_NOT_FOUND);
         Map<String, Object> aggregationSettings = (Map<String, Object>) aggregation.get(aggregationKeyword);
-        MongoAggregation agg = mongoAggregationsFactory.createFromKeyword(aggregationKeyword, aggregationSettings);
+        MongoAggregation agg = mongoAggregationModelFactory.createFromKeyword(aggregationKeyword, aggregationSettings);
         return List.of(agg);
     }
 

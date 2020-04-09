@@ -2,7 +2,10 @@ package pl.jacekduszenko.abstr.model.mongo.agg.metric;
 
 import lombok.Getter;
 import pl.jacekduszenko.abstr.model.mongo.agg.MongoAggregation;
+import pl.jacekduszenko.abstr.model.mongo.agg.bucket.MongoTermBucketAggregation;
+import pl.jacekduszenko.abstr.model.mongo.agg.bucket.strategy.impl.SingleNestedAggregationStrategy;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -47,6 +50,14 @@ public enum MongoAggregations {
         @Override
         public MongoAggregation newInstance(Map<String, Object> dataChunk) {
             return new SumAggregation(dataChunk);
+        }
+    },
+    TERMS("terms") {
+        @Override
+        public MongoAggregation newInstance(Map<String, Object> dataChunk) {
+            return new MongoTermBucketAggregation(dataChunk, List.of(
+                    new SingleNestedAggregationStrategy()
+            ));
         }
     };
 

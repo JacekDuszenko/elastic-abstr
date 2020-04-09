@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 @Service
-public class MongoAggregationsFactory {
+public class MongoAggregationModelFactory {
 
     MongoAggregation createFromKeyword(String keyword, Map<String, Object> dataChunk) throws MongoAggregationCreationException {
         return Arrays.stream(MongoAggregations.values())
